@@ -2,8 +2,8 @@
   "name": "webext-driver",
   "version": "0.0.0",
   "description": "Control browser by WebExtensions API via HTTP",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "bin": {
+    "eslint": "./bin/eslint.js"
   },
   "author": "Shin'ya Ueoka",
   "license": "MIT",
@@ -15,5 +15,8 @@
     "intelli-espower-loader": "^1.0.1",
     "mocha": "^6.0.2",
     "power-assert": "^1.6.1"
+  },
+  "directories": {
+    "test": "test/"
   }
 }
