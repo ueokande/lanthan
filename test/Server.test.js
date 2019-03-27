@@ -5,21 +5,53 @@ const request = require('request-promise-native');
 class MockClient {
   constructor() {
     this.messages = [];
+    this.onMessageListener = () => {};
   }
 
   sendMessage(message) {
     this.messages.push(message);
+    this.onMessageListener(message);
+  }
+
+  onMessage(listener) {
+    this.onMessageListener = listener;
+  }
+}
+
+class MockListener {
+  constructor() {
+    this.onMessageListener = () => {};
+    this.onErrorListener = () => {};
+  }
+
+  onMessage(listener) {
+    this.onMessageListener = listener;
+  }
+
+  onError(listener) {
+    this.onErrorListener = listener;
+  }
+
+  invokeMessage(message) {
+    this.onMessageListener(message);
+  }
+
+  invokeError(err) {
+    this.onErrorListener(err);
   }
 }
 
 const port = '12345';
 
 describe('Server', () => {
-  let server
+  let client;
+  let listener;
+  let server;
 
   beforeEach(() => {
+    listener = new MockListener();
     client = new MockClient();
-    server = new Server('127.0.0.1', port, client);
+    server = new Server('127.0.0.1', port, client, listener);
     server.listen();
   });
 
@@ -28,21 +60,77 @@ describe('Server', () => {
   })
 
   describe('routes', () => {
-    it('should send messages', async () => {
-      let resp = await request({
+    it('should send messages and receive response', async () => {
+      client.onMessage((message) => {
+        listener.invokeMessage({
+          id: message.id,
+          body: "message from browser",
+        });
+      });
+
+      let promise = request({
         url:`http://127.0.0.1:${port}/browser.tabs.query`,
         method: 'PUT',
         json: [1, 'b', null],
         resolveWithFullResponse: true,
       });
+
+      let resp = await promise;
+
       assert(resp.statusCode === 200);
-      assert.deepEqual(resp.body, { status: 200, message: 'ok' });
+      assert(resp.body === "message from browser");
 
       assert(client.messages.length === 1);
-      assert.deepEqual(client.messages[0], {
+      assert(typeof client.messages[0].id === 'string');
+      assert.deepEqual(client.messages[0].body, {
         method: 'browser.tabs.query',
         params: [1, 'b', null],
       });
+    });
+
+    it('should send messages and receive response', async () => {
+      client.onMessage((message) => {
+        listener.invokeMessage({
+          id: message.id,
+          error: "error occurs",
+        });
+      });
+
+      let promise = request({
+        url:`http://127.0.0.1:${port}/browser.tabs.query`,
+        method: 'PUT',
+        json: [1, 'b', null],
+        resolveWithFullResponse: true,
+      });
+
+      try {
+        await promise;
+      } catch (e) {
+        let resp = e.response;
+        assert(resp.statusCode === 520);
+        assert.deepEqual(resp.body, { status: 520, message: 'error occurs' });
+      }
+    });
+
+    it('should send messages and receive response', async () => {
+      client.onMessage((message) => {
+        listener.invokeMessage({ id: message.id });
+      });
+
+      let promise = request({
+        url:`http://127.0.0.1:${port}/browser.tabs.query`,
+        method: 'PUT',
+        json: [1, 'b', null],
+        resolveWithFullResponse: true,
+      });
+
+      try {
+        await promise;
+      } catch (e) {
+        let resp = e.response;
+        assert(resp.statusCode === 520);
+        assert.deepEqual(resp.body, { status: 520, message: 'unknown response from browser' });
+      }
     });
 
     it('should returns 404 with undefined method name', async () => {
@@ -99,4 +187,3 @@ describe('Server', () => {
     })
   });
 });
-
