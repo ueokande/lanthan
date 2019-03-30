@@ -1,0 +1,20 @@
+{
+  "manifest_version": 2,
+  "name": "webext-driver",
+  "description": "Remove control for WebExtensions API",
+  "version": "0.0.1",
+  "applications": {
+    "gecko": {
+      "id": "ping_pong@example.org"
+    }
+  },
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
+  "permissions": [
+    "tabs",
+    "nativeMessaging"
+  ]
+}
