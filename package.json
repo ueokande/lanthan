@@ -12,6 +12,7 @@
     "express": "^4.16.4"
   },
   "devDependencies": {
+    "eslint": "^5.16.0",
     "intelli-espower-loader": "^1.0.1",
     "mocha": "^6.0.2",
     "power-assert": "^1.6.1",
