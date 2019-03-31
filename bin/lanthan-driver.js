@@ -13,7 +13,7 @@ const MessageListener = require('../lib/webext/MessageListener');
 const Logger = require('../lib/webext/Logger');
 const Server = require('../lib/webext/Server');
 
-const defaultConfigPath = path.join(os.tmpdir(), 'webext-driver.json');
+const defaultConfigPath = path.join(os.tmpdir(), 'lanthan-driver.json');
 
 const main = () => {
   program

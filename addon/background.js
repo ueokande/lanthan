@@ -1,4 +1,4 @@
-const NATIVA_NAME = 'webext-driver';
+const NATIVA_NAME = 'lanthan_driver';
 let port = browser.runtime.connectNative(NATIVA_NAME);
 
 const newResponse = (id, body) => {
@@ -39,5 +39,11 @@ port.onMessage.addListener(async(request) => {
   } catch (e) {
     port.postMessage(newErrorResponse(id, e));
     console.error(e);
+  }
+});
+
+port.onDisconnect.addListener((p) => {
+  if (p.error) {
+    console.error('Disconnected due to an error:', p.error);
   }
 });

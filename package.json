@@ -1,7 +1,7 @@
 {
-  "name": "webext-driver",
+  "name": "lanthan",
   "version": "0.0.0",
-  "description": "Control browser by WebExtensions API via HTTP",
+  "description": "A test framework for WebExtensions",
   "bin": {
     "eslint": "./bin/eslint.js"
   },

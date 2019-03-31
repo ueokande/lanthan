@@ -1,11 +1,11 @@
 {
   "manifest_version": 2,
-  "name": "webext-driver",
-  "description": "Remove control for WebExtensions API",
+  "name": "lanthan-driver",
+  "description": "Remote WebExtensions API driver",
   "version": "0.0.1",
   "applications": {
     "gecko": {
-      "id": "webext-driver@i-beam.org"
+      "id": "lanthan-driver@i-beam.org"
     }
   },
   "background": {
