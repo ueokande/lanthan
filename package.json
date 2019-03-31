@@ -2,8 +2,9 @@
   "name": "lanthan",
   "version": "0.0.0",
   "description": "A test framework for WebExtensions",
-  "bin": {
-    "eslint": "./bin/eslint.js"
+  "scripts": {
+    "lint": "eslint .",
+    "test": "mocha --require intelli-espower-loader test/**/*.test.js"
   },
   "author": "Shin'ya Ueoka",
   "license": "MIT",
@@ -19,8 +20,5 @@
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
     "web-ext": "^3.0.0"
-  },
-  "directories": {
-    "test": "test/"
   }
 }
