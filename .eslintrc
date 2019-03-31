@@ -1,14 +1,11 @@
 {
   "env": {
     "es6": true,
-    "node" : true,
-    "mocha" : true
+    "mocha" : true,
+    "node" : true
   },
   "parserOptions": {
-    "ecmaVersion": 6,
-    "ecmaFeatures": {
-      "experimentalObjectRestSpread": true
-    }
+    "ecmaVersion": 2017
   },
   "extends": [ "eslint:all" ],
   "rules": {
@@ -58,6 +55,7 @@
     "padded-blocks": "off",
     "prefer-const": "off",
     "prefer-destructuring": ["error", { "AssignmentExpression": {"array": false}}],
+    "prefer-object-spread": "off",
     "prefer-template": "off",
     "quote-props": "off",
     "quotes": ["error", "single", { "allowTemplateLiterals": true }],

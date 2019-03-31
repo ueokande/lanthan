@@ -27,8 +27,9 @@ describe('MessageClient', () => {
       client.sendMessage({ name: 'alice', age: 12 });
       client.sendMessage({ name: 'bob', age: 14 });
 
-      buffer.close();
-      await new Promise(resolve => buffer.on('finish', resolve));
+      buffer.end();
+
+      await new Promise(resolve => buffer.on('close', resolve));
 
       let raw = fs.readFileSync(tmpfile);
       let len1 = raw.slice(0, 4).readUInt32LE();
