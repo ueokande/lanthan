@@ -3,13 +3,13 @@ version: 2.1
 executors:
   node8:
     docker:
-      - image: circleci/node:8.0.0-browser
+      - image: circleci/node:8.0.0-browsers
   node10:
     docker:
-      - image: circleci/node:10.0.0-browser
+      - image: circleci/node:10.0.0-browsers
   node_latest:
     docker:
-      - image: circleci/node:latest
+      - image: circleci/node:latest-browsers
 
 commands:
   build:
