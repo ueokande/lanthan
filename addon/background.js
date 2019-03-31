@@ -1,4 +1,5 @@
-var port = browser.runtime.connectNative("ping_pong");
+const NATIVA_NAME = 'webext-driver';
+var port = browser.runtime.connectNative(NATIVA_NAME);
 
 const newResponse = (id, body) => {
   return { id, body };

@@ -5,7 +5,7 @@
   "version": "0.0.1",
   "applications": {
     "gecko": {
-      "id": "ping_pong@example.org"
+      "id": "webext-driver@i-beam.org"
     }
   },
   "background": {

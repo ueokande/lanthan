@@ -24,6 +24,9 @@ class MockListener {
     this.onErrorListener = () => {};
   }
 
+  listen() {
+  }
+
   onMessage(listener) {
     this.onMessageListener = listener;
   }
