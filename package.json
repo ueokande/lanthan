@@ -4,7 +4,7 @@
   "description": "A test framework for WebExtensions",
   "scripts": {
     "lint": "eslint .",
-    "test": "mocha --require intelli-espower-loader --timeout 5000 test/**/*.test.js"
+    "test": "mocha --require intelli-espower-loader --timeout 5000 'test/**/*.test.js'"
   },
   "author": "Shin'ya Ueoka",
   "license": "MIT",
