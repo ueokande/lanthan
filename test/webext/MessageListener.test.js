@@ -1,3 +1,5 @@
+'use strict';
+
 const MessageListener = require('../../lib/webext/MessageListener');
 const assert = require('power-assert');
 const os = require('os');
@@ -13,7 +15,7 @@ describe('MessageListener', () => {
     let bytes = Buffer.alloc(4);
     bytes.writeUInt32LE(num, 0);
     return bytes;
-  }
+  };
 
   beforeEach(() => {
     tmpfile = path.join(os.tmpdir(), 'MessageListener-' + uuidv4());
@@ -24,7 +26,7 @@ describe('MessageListener', () => {
   });
 
   describe('#onMessage', () => {
-    it('received messages', async () => {
+    it('received messages', async() => {
       let data1 = Buffer.from(JSON.stringify({ name: 'alice', age: 12 }));
       let data2 = Buffer.from(JSON.stringify({ name: 'bob', age: 14 }));
       fs.appendFileSync(tmpfile, Buffer.concat([
@@ -41,15 +43,15 @@ describe('MessageListener', () => {
         listener.onMessage((message) => {
           messages.push(message);
           count++;
-          if (count == 2) {
+          if (count === 2) {
             resolve();
           }
         });
       });
 
       assert.equal(messages.length, 2);
-      assert.deepEqual(messages[0], { name: 'alice', age: 12 })
-      assert.deepEqual(messages[1], { name: 'bob', age: 14 })
+      assert.deepEqual(messages[0], { name: 'alice', age: 12 });
+      assert.deepEqual(messages[1], { name: 'bob', age: 14 });
     });
   });
 
@@ -64,13 +66,13 @@ describe('MessageListener', () => {
       let buffer = fs.createReadStream(tmpfile);
       let listener = new MessageListener(buffer);
       listener.listen();
-      listener.onMessage((message) => {});
+      listener.onMessage(() => {});
       await new Promise((resolve) => {
         listener.onError((err) => {
           errors.push(err);
           resolve();
         });
-      })
+      });
 
       assert(errors.length === 1);
       assert(errors[0] instanceof SyntaxError);

@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+'use strict';
+
 const pkg = require('../package.json');
 const program = require('commander');
 const path = require('path');
@@ -16,7 +18,8 @@ const defaultConfigPath = path.join(os.tmpdir(), 'webext-driver.json');
 const main = () => {
   program
     .version(pkg.version)
-    .option('-c, --config <path>', 'path to configuration file', defaultConfigPath)
+    .option('-c, --config <path>', 'path to configuration file',
+      defaultConfigPath)
     .parse(process.argv);
 
   let conf = config.loadFrom(program.config);
@@ -28,23 +31,19 @@ const main = () => {
   logger.info(`started with configuration file '${program.config}':`,
     `address=${conf.address},`,
     `port=${conf.port},`,
-    `logFile=${conf.logFile}`)
+    `logFile=${conf.logFile}`);
 
+  let server = null;
   try {
     server = new Server(conf.address, conf.port, client, listener, logger);
     server.listen();
-  } catch(e) {
+  } catch (e) {
     logger.error(e);
     os.exit(1);
   }
   process.on('SIGTERM', () => {
     server.close();
   });
-}
+};
 
-try {
-  main();
-} catch (e) {
-  console.error(e);
-  os.exit(1);
-}
+main();

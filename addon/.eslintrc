@@ -1,0 +1,15 @@
+{
+  "env": {
+    "browser": true,
+    "node": false,
+    "webextensions": true
+  },
+  "extends": [
+    "../.eslintrc"
+  ],
+  "rules": {
+    "no-console": "off",
+    "strict": "off"
+  }
+}
+

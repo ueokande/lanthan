@@ -1,0 +1,11 @@
+{
+  "extends": [
+    "../.eslintrc"
+  ],
+  "rules": {
+    "array-bracket-newline": "off",
+    "init-declarations": "off",
+    "max-len": "off",
+    "max-lines-per-function": "off"
+  }
+}
