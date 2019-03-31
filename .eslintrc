@@ -25,6 +25,7 @@
     "indent": ["error", 2],
     "jsx-quotes": ["error", "prefer-single"],
     "max-classes-per-file": "off",
+    "max-len": ["error", { "code": 120 }],
     "max-params": ["error", 5],
     "max-statements": ["error", 15],
     "multiline-comment-style": "off",

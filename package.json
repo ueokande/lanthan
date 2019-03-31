@@ -4,10 +4,11 @@
   "description": "A test framework for WebExtensions",
   "scripts": {
     "lint": "eslint .",
-    "test": "mocha --require intelli-espower-loader test/**/*.test.js"
+    "test": "mocha --require intelli-espower-loader --timeout 5000 test/**/*.test.js"
   },
   "author": "Shin'ya Ueoka",
   "license": "MIT",
+  "main": "lib/index.js",
   "dependencies": {
     "commander": "^2.19.0",
     "express": "^4.16.4"

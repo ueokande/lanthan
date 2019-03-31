@@ -1,0 +1,13 @@
+{
+  "env": {
+    "browser": true,
+    "node": false
+  },
+  "extends": [
+    "../../../.eslintrc"
+  ],
+  "rules": {
+    "no-console": "off"
+  }
+}
+

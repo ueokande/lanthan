@@ -6,6 +6,7 @@
     "array-bracket-newline": "off",
     "init-declarations": "off",
     "max-len": "off",
-    "max-lines-per-function": "off"
+    "max-lines-per-function": "off",
+    "require-atomic-updates": "off"
   }
 }
