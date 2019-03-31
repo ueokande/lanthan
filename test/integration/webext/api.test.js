@@ -11,7 +11,7 @@ describe('webext', () => {
 
   before(async() => {
     let sv = server.newApp();
-    http = sv.listen(10101);
+    http = sv.listen(10101, '127.0.0.1');
 
     firefox = await lanthan.firefox();
     session = firefox.session;
