@@ -15,8 +15,6 @@ describe('webext', () => {
 
     firefox = await lanthan.firefox();
     session = firefox.session;
-
-    await session.installAddon('../vim-vixen');
   });
 
   after(async() => {
