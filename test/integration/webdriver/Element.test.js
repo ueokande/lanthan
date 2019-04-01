@@ -67,7 +67,7 @@ describe('Element', () => {
     it('shoud get styles of the element', async() => {
       let elem = await firefox.session.findElementByCSS('.bold');
       let value = await elem.getStyle('font-weight');
-      assert(value === '999');
+      assert(Number(value) > 0);
     });
   });
 });
