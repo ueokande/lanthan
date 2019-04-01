@@ -3,15 +3,50 @@ version: 2.1
 executors:
   node8:
     docker:
-      - image: circleci/node:8.0.0-browsers
+      - image: circleci/node:8-browsers
   node10:
     docker:
-      - image: circleci/node:10.0.0-browsers
+      - image: circleci/node:10-stretch-browsers
   node_latest:
     docker:
-      - image: circleci/node:latest-browsers
+      - image: circleci/node:11-stretch-browsers
 
 commands:
+  install_firefox:
+    description: "Install firefox binary"
+    parameters:
+      version:
+        type: string
+    steps:
+      - restore_cache:
+          key: firefox-bin
+          paths:
+            - ~/firefox
+      - run:
+          name: Install Firefox
+          command: |
+            test -d ~/firefox/<< parameters.version >> && exit 0
+            url='https://ftp.mozilla.org/pub/firefox/releases/<< parameters.version >>/linux-x86_64/en-US/firefox-<< parameters.version >>.tar.bz2'
+            curl -sSL -o- "$url" | tar xvfj - -C /tmp
+            mkdir -p ~/firefox
+            mv /tmp/firefox ~/firefox/<< parameters.version >>
+      - save_cache:
+          key: firefox-bin
+          paths:
+            - ~/firefox
+      - run: echo 'export PATH=~/firefox/<< parameters.version >>:$PATH' >> $BASH_ENV
+
+  npm_install:
+    description: "Do npm install and cache node_modules"
+    steps:
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+          paths:
+            - node_modules
+
   build:
     steps:
       - run:
@@ -23,13 +58,7 @@ commands:
           background: true
 
       - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
-      - run: npm install
-      - save_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
-          paths:
-            - node_modules
+      - npm_install
       - run: npm run lint
       - run: npm test
 
@@ -38,18 +67,24 @@ jobs:
     executor:
       name: node8
     steps:
+      - install_firefox:
+          version: "60.0esr"
       - build
 
   build_node10:
     executor:
       name: node10
     steps:
+      - install_firefox:
+          version: "60.0esr"
       - build
 
   build_node_latest:
     executor:
       name: node_latest
     steps:
+      - install_firefox:
+          version: "60.0esr"
       - build
 
   deploy:
