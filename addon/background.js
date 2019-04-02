@@ -6,7 +6,7 @@ const newResponse = (id, body) => {
 };
 
 const newErrorResponse = (id, err) => {
-  return { id, error: err };
+  return { id, error: err.message };
 };
 
 const onMessage = ({ method, params }) => {

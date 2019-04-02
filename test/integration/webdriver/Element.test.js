@@ -21,7 +21,9 @@ describe('Element', () => {
   });
 
   after(async() => {
-    await firefox.close();
+    if (firefox) {
+      await firefox.close();
+    }
     http.close();
   });
 

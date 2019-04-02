@@ -18,7 +18,9 @@ describe('webext', () => {
   });
 
   after(async() => {
-    await firefox.close();
+    if (firefox) {
+      await firefox.close();
+    }
     http.close();
   });
 
@@ -36,14 +38,13 @@ describe('webext', () => {
     assert(tabs.length === 2);
   });
 
-  it('should invoke WebExtensions APIs', async() => {
+  it('should returns error from browser', async() => {
     let browser = firefox.browser;
     try {
       await browser.tabs.query();
       assert.fail('unexpected success');
-      throw new Error('');
     } catch (e) {
-      assert(e.message.includes(520));
+      assert(e.message === 'Incorrect argument types for tabs.query.');
     }
   });
 });
