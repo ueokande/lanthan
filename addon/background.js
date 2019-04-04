@@ -1,12 +1,20 @@
 const NATIVA_NAME = 'lanthan_driver';
 let port = browser.runtime.connectNative(NATIVA_NAME);
 
-const newResponse = (id, body) => {
-  return { id, body };
+const newResponse = (id, result) => {
+  return {
+    success: true,
+    id,
+    result
+  };
 };
 
 const newErrorResponse = (id, err) => {
-  return { id, error: err.message };
+  return {
+    success: false,
+    id,
+    message: err.message
+  };
 };
 
 const onMessage = ({ method, params }) => {
@@ -34,11 +42,11 @@ port.onMessage.addListener(async(request) => {
 
   let id = request.id;
   try {
-    let response = await onMessage(request.body);
-    port.postMessage(newResponse(id, response));
+    let result = await onMessage(request.body);
+    port.postMessage(newResponse(id, result));
   } catch (e) {
-    port.postMessage(newErrorResponse(id, e));
     console.error(e);
+    port.postMessage(newErrorResponse(id, e));
   }
 });
 

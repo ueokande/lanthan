@@ -80,7 +80,8 @@ describe('Server', () => {
       client.onMessage((message) => {
         listener.invokeMessage({
           id: message.id,
-          body: 'message from browser',
+          success: true,
+          result: 'message from browser',
         });
       });
 
@@ -104,11 +105,33 @@ describe('Server', () => {
       });
     });
 
-    it('should send messages and receive response', async() => {
+    it('should send messages and receive empty response', async() => {
       client.onMessage((message) => {
         listener.invokeMessage({
           id: message.id,
-          error: 'error occurs',
+          success: true,
+        });
+      });
+
+      let promise = request({
+        url: `http://127.0.0.1:${port}/browser.tabs.query`,
+        method: 'PUT',
+        json: [1, 'b', null],
+        resolveWithFullResponse: true,
+      });
+
+      let resp = await promise;
+
+      assert(resp.statusCode === 200);
+      assert(resp.body === undefined);
+    });
+
+    it('should send messages and receive an error with message', async() => {
+      client.onMessage((message) => {
+        listener.invokeMessage({
+          id: message.id,
+          success: false,
+          message: 'error occurs',
         });
       });
 
@@ -128,7 +151,7 @@ describe('Server', () => {
       }
     });
 
-    it('should send messages and receive response', async() => {
+    it('should send messages and an unknown error', async() => {
       client.onMessage((message) => {
         listener.invokeMessage({ id: message.id });
       });
