@@ -95,7 +95,7 @@ describe('Server', () => {
       let resp = await promise;
 
       assert(resp.statusCode === 200);
-      assert(resp.body === 'message from browser');
+      assert(resp.body[0] === 'message from browser');
 
       assert(client.messages.length === 1);
       assert(typeof client.messages[0].id === 'string');
@@ -123,7 +123,7 @@ describe('Server', () => {
       let resp = await promise;
 
       assert(resp.statusCode === 200);
-      assert(resp.body === undefined);
+      assert(resp.body[0] === undefined);
     });
 
     it('should send messages and receive an error with message', async() => {
