@@ -1,0 +1,21 @@
+{
+  "manifest_version": 2,
+  "name": "lanthan-driver",
+  "description": "Remote WebExtensions API driver",
+  "version": "0.0.1",
+  "applications": {
+    "gecko": {
+      "id": "lanthan-driver@i-beam.org"
+    }
+  },
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
+  "permissions": [
+    "tabs",
+    "nativeMessaging"
+  ]
+}
+
