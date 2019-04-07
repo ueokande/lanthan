@@ -12,9 +12,9 @@
   "dependencies": {
     "commander": "^2.19.0",
     "express": "^4.16.4",
+    "jszip": "^3.2.1",
     "request": "^2.88.0",
-    "request-promise-native": "^1.0.7",
-    "web-ext": "^3.0.0"
+    "request-promise-native": "^1.0.7"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
