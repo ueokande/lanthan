@@ -54,4 +54,33 @@ describe('AddonBuilder', () => {
       });
     });
   });
+
+  describe('#addBackgroundScript', () => {
+    it('should adds background script', async() => {
+      let builder = new AddonBuilder(path.join(__dirname, 'testdata'));
+      let name = path.join(__dirname, 'AddonBuilder.test.js');
+      builder.addBackgroundScript('AddonBuilder.test.js', fs.readFileSync(name));
+      let data = await builder.build();
+
+      let zip = await JSZip.loadAsync(data);
+      let added = await zip.file('AddonBuilder.test.js').async('string');
+      assert(added.startsWith(`'use strict';`));
+
+      let manifest = JSON.parse(await zip.file('manifest.json').async('string'));
+      assert.deepEqual(manifest.background.scripts.sort(),
+        ['background.js', 'AddonBuilder.test.js'].sort());
+    });
+  });
+
+  describe('#addPermission', () => {
+    it('should add permission to the manifest', async() => {
+      let builder = new AddonBuilder(path.join(__dirname, 'testdata'));
+      builder.addPermission('dns');
+      let data = await builder.build();
+
+      let zip = await JSZip.loadAsync(data);
+      let manifest = JSON.parse(await zip.file('manifest.json').async('string'));
+      assert(manifest.permissions.includes('dns'));
+    });
+  });
 });
