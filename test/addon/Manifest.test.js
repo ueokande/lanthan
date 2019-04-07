@@ -3,7 +3,7 @@
 const assert = require('power-assert');
 const Manifest = require('../../lib/addon/Manifest');
 
-const testdata = {
+const fullManifest = {
   'name': 'my-addon',
   'description': 'this is my addon',
   'version': '0.1',
@@ -74,27 +74,122 @@ const testdata = {
   'web_accessible_resources': ['images/my-image.png']
 };
 
+const emptyManifest = {
+};
+
 describe('Manifest', () => {
-  it('should returns background scripts', () => {
-    let manifest = new Manifest(testdata);
+  describe('#backgroundScripts', () => {
+    it('should return background script paths', () => {
+      let manifest = new Manifest(fullManifest);
+      assert.deepEqual(manifest.backgroundScripts(), ['jquery.js', 'my-background.js']);
+    });
 
-    assert.deepEqual(manifest.backgroundScripts(), ['jquery.js', 'my-background.js']);
-    assert.deepEqual(manifest.contentScripts(), ['content1.js', 'content2.js', 'googler.js']);
-    assert.deepEqual(manifest.icons(), ['icon.png', 'icon@2x.png']);
-    assert.deepEqual(manifest.browserActionIcons(), ['button/geo-19.png', 'button/geo-38.png']);
-    assert.deepEqual(manifest.browserActionPopup(), 'popup/geo.html');
-    assert.deepEqual(manifest.pageActionIcons(), ['button/geo-19.png', 'button/geo-38.png']);
-    assert.deepEqual(manifest.pageActionPopup(), 'popup/geo.html');
-    assert.deepEqual(manifest.webAccessibleResources(), ['images/my-image.png']);
+    it('should return empty if background field not present', () => {
+      let manifest = new Manifest(emptyManifest);
+      assert.equal(manifest.backgroundScripts().length, 0);
+    });
+  });
 
-    let resources = [
-      'jquery.js', 'my-background.js',
-      'content1.js', 'content2.js', 'googler.js',
-      'icon.png', 'icon@2x.png',
-      'button/geo-19.png', 'button/geo-38.png',
-      'popup/geo.html',
-      'images/my-image.png',
-    ];
-    assert.deepEqual(manifest.dependencies(), resources);
+  describe('#contentScripts', () => {
+    it('should return content script paths', () => {
+      let manifest = new Manifest(fullManifest);
+      assert.deepEqual(manifest.contentScripts(), ['content1.js', 'content2.js', 'googler.js']);
+    });
+
+    it('should return empty if content_scripts field not present', () => {
+      let manifest = new Manifest(emptyManifest);
+      assert.equal(manifest.contentScripts().length, 0);
+    });
+  });
+
+  describe('#icons', () => {
+    it('should return icon paths', () => {
+      let manifest = new Manifest(fullManifest);
+      assert.deepEqual(manifest.icons(), ['icon.png', 'icon@2x.png']);
+    });
+
+    it('should return empty if icons field not present', () => {
+      let manifest = new Manifest(emptyManifest);
+      assert.equal(manifest.icons().length, 0);
+    });
+  });
+
+  describe('#browserActionIcons', () => {
+    it('should return icon paths on browser actions', () => {
+      let manifest = new Manifest(fullManifest);
+      assert.deepEqual(manifest.browserActionIcons(), ['button/geo-19.png', 'button/geo-38.png']);
+    });
+
+    it('should return empty if browser_action field not present', () => {
+      let manifest = new Manifest(emptyManifest);
+      assert.equal(manifest.browserActionIcons().length, 0);
+    });
+  });
+
+  describe('#browserActionPopup', () => {
+    it('should return a popup path on browser actions', () => {
+      let manifest = new Manifest(fullManifest);
+      assert.deepEqual(manifest.browserActionPopup(), 'popup/geo.html');
+    });
+
+    it('should return null if browser_action field not present', () => {
+      let manifest = new Manifest(emptyManifest);
+      assert.equal(manifest.browserActionPopup(), null);
+    });
+  });
+
+  describe('#pageActionIcons', () => {
+    it('should return icon paths on page actions', () => {
+      let manifest = new Manifest(fullManifest);
+      assert.deepEqual(manifest.pageActionIcons(), ['button/geo-19.png', 'button/geo-38.png']);
+    });
+
+    it('should return empty if page_action field not present', () => {
+      let manifest = new Manifest(emptyManifest);
+      assert.equal(manifest.pageActionIcons().length, 0);
+    });
+  });
+
+  describe('#pageActionPopup', () => {
+    it('should return a popup path on page actions', () => {
+      let manifest = new Manifest(fullManifest);
+      assert.deepEqual(manifest.pageActionPopup(), 'popup/geo.html');
+    });
+
+    it('should return null if page_action field not present', () => {
+      let manifest = new Manifest(emptyManifest);
+      assert.equal(manifest.pageActionPopup(), null);
+    });
+  });
+
+  describe('#webAccessibleResources', () => {
+    it('should return paths of the Web Accessible Resources', () => {
+      let manifest = new Manifest(fullManifest);
+      assert.deepEqual(manifest.webAccessibleResources(), ['images/my-image.png']);
+    });
+
+    it('should return empty if web_accessible_resources field not present', () => {
+      let manifest = new Manifest(emptyManifest);
+      assert.equal(manifest.webAccessibleResources().length, 0);
+    });
+  });
+
+  describe('#dependencies', () => {
+    it('should return all dependency paths', () => {
+      let manifest = new Manifest(fullManifest);
+      assert.deepEqual(manifest.dependencies(), [
+        'jquery.js', 'my-background.js',
+        'content1.js', 'content2.js', 'googler.js',
+        'icon.png', 'icon@2x.png',
+        'button/geo-19.png', 'button/geo-38.png',
+        'popup/geo.html',
+        'images/my-image.png',
+      ]);
+    });
+
+    it('should return empty if web_accessible_resources field not present', () => {
+      let manifest = new Manifest(emptyManifest);
+      assert.equal(manifest.webAccessibleResources().length, 0);
+    });
   });
 });
