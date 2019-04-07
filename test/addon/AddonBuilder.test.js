@@ -83,4 +83,20 @@ describe('AddonBuilder', () => {
       assert(manifest.permissions.includes('dns'));
     });
   });
+
+  describe('#overrideProperty', () => {
+    it('should override a property', async() => {
+      let builder = new AddonBuilder(path.join(__dirname, 'testdata'));
+      builder.overrideProperty('applications', {
+        'gecko': {
+          id: 'foobar@example.com'
+        }
+      });
+      let data = await builder.build();
+
+      let zip = await JSZip.loadAsync(data);
+      let manifest = JSON.parse(await zip.file('manifest.json').async('string'));
+      assert.equal(manifest.applications.gecko.id, 'foobar@example.com');
+    });
+  });
 });
