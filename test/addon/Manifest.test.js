@@ -59,7 +59,6 @@ const fullManifest = {
     }
   },
 
-
   'page_action': {
     'default_icon': {
       '19': 'button/geo-19.png',
@@ -67,6 +66,10 @@ const fullManifest = {
     },
     'default_title': 'Whereami?',
     'default_popup': 'popup/geo.html'
+  },
+
+  'options_ui': {
+    'page': 'settings.html'
   },
 
   'permissions': ['webNavigation'],
@@ -171,6 +174,18 @@ describe('Manifest', () => {
     it('should return empty if web_accessible_resources field not present', () => {
       let manifest = new Manifest(emptyManifest);
       assert.equal(manifest.webAccessibleResources().length, 0);
+    });
+  });
+
+  describe('#optionsUiPage', () => {
+    it('should return a path of the options page', () => {
+      let manifest = new Manifest(fullManifest);
+      assert.deepEqual(manifest.optionsUiPage(), 'settings.html');
+    });
+
+    it('should return empty if options_ui field not present', () => {
+      let manifest = new Manifest(emptyManifest);
+      assert.equal(manifest.optionsUiPage(), null);
     });
   });
 
