@@ -199,6 +199,7 @@ describe('Manifest', () => {
         'button/geo-19.png', 'button/geo-38.png',
         'popup/geo.html',
         'images/my-image.png',
+        'settings.html',
       ]);
     });
 
