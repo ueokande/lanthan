@@ -1,7 +1,7 @@
 'use strict';
 
 const Server = require('../../lib/webext/Server');
-const assert = require('power-assert');
+const assert = require('assert');
 const request = require('request-promise-native');
 
 class MockClient {

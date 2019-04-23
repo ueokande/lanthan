@@ -2,7 +2,7 @@
 
 const lanthan = require('../../../lib');
 const Element = require('../../../lib/webdriver/Element');
-const assert = require('power-assert');
+const assert = require('assert');
 const server = require('../server');
 
 describe('Session', () => {

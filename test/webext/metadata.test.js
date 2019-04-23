@@ -1,7 +1,7 @@
 'use strict';
 
 const metadata = require('../../lib/webext/metadata');
-const assert = require('power-assert');
+const assert = require('assert');
 
 describe('metadata', () => {
   describe('#methods', () => {

@@ -1,6 +1,6 @@
 'use strict';
 
-const assert = require('power-assert');
+const assert = require('assert');
 const Manifest = require('../../lib/addon/Manifest');
 
 const fullManifest = {

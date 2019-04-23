@@ -1,7 +1,7 @@
 'use strict';
 
 const lanthan = require('../../../lib');
-const assert = require('power-assert');
+const assert = require('assert');
 const server = require('../server');
 
 describe('webext', () => {

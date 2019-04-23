@@ -1,7 +1,7 @@
 'use strict';
 
 const MessageListener = require('../../lib/webext/MessageListener');
-const assert = require('power-assert');
+const assert = require('assert');
 const os = require('os');
 const path = require('path');
 const fs = require('fs');

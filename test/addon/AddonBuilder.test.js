@@ -1,7 +1,7 @@
 'use strict';
 
 const JSZip = require('jszip');
-const assert = require('power-assert');
+const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
 const AddonBuilder = require('../../lib/addon/AddonBuilder');
