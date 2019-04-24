@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: webdriver/WebDriver.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: webdriver/WebDriver.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+const request = require('request-promise-native');
+
+/**
+ * WebDriver is a client of {@link https://w3c.github.io/webdriver/|WebDriver}.
+ */
+class WebDriver {
+
+  /**
+   * @param {number} port A port of the WebDriver server.
+   * @param {string} [address="127.0.0.1"] An address of the WebDriver server.
+   */
+  constructor(port, address = '127.0.0.1') {
+    this.endpoint = `http://${address}:${port}`;
+  }
+
+  /**
+   * Creates new session for the WebDriver.
+   *
+   * @see {@link
+   * https://w3c.github.io/webdriver/#dfn-new-sessions| POST /session}
+   *
+   * @param {Object=} capabilities Capability
+   */
+  async newSession(capabilities) {
+    let response = await request({
+      url: `${this.endpoint}/session`,
+      method: 'POST',
+      json: { capabilities },
+    });
+    return response.value.sessionId;
+  }
+
+  /**
+   * Delete session of the WebDriver.
+   *
+   * @see {@link
+   * https://w3c.github.io/webdriver/#dfn-delete-session|
+   * DELETE /session/&amp;lt;session id&amp;gt;}
+   *
+   * @param {string} sessionId The session ID.
+   */
+  async deleteSession(sessionId) {
+    await request({
+      url: `${this.endpoint}/session/${sessionId}`,
+      method: 'DELETE',
+      json: {},
+    });
+  }
+
+  /**
+   * Get all window handles.
+   *
+   * @see {@link
+   * https://w3c.github.io/webdriver/#dfn-get-window-handles|
+   * GET /session/&amp;lt;session id&amp;gt;/window/handles}
+   *
+   * @param {string} sessionId The session ID.
+   * @return {object[]} Handles
+   */
+  async getWindowHandles(sessionId) {
+    let response = await request({
+      url: `${this.endpoint}/session/${sessionId}/window/handles`,
+      method: 'GET',
+      json: {},
+    });
+    return response.value;
+  }
+
+  /**
+   * Get current window handle.
+   *
+   * @see {@link
+   * https://w3c.github.io/webdriver/#dfn-get-window-handle|
+   * GET /session/&amp;lt;session id&amp;gt;/window}
+   *
+   * @param {string} sessionId The session ID.
+   * @return {string[]} Window handle IDs.
+   */
+  async getWindowHandle(sessionId) {
+    let response = await request({
+      url: `${this.endpoint}/session/${sessionId}/window`,
+      method: 'GET',
+      json: {},
+    });
+    return response.value;
+  }
+
+  /**
+   * Select the current window.
+   *
+   * @see {@link
+   * https://w3c.github.io/webdriver/#dfn-switch-to-window|
+   * POST /session/&amp;lt;session id&amp;gt;/window}
+   *
+   * @param {string} sessionId The session ID.
+   * @param {string} handle The handle ID of the window
+   */
+  async switchToWindow(sessionId, handle) {
+    let response = await request({
+      url: `${this.endpoint}/session/${sessionId}/window`,
+      method: 'POST',
+      json: { handle },
+    });
+    return response.value;
+  }
+
+  /**
+   * Select the current frame in the window.
+   *
+   * @see {@link
+   * https://w3c.github.io/webdriver/#dfn-switch-to-frame|
+   * POST /session/&amp;lt;session id&amp;gt;/frame}
+   *
+   * @param {string} sessionId The session ID.
+   * @param {string} id The frame ID.
+   */
+  async switchToFrame(sessionId, id) {
+    let response = await request({
+      url: `${this.endpoint}/session/${sessionId}/frame`,
+      method: 'POST',
+      json: { id },
+    });
+    return response.value;
+  }
+
+  /**
+   * Select the top frame in the window.
+   *
+   * @see {@link
+   * https://w3c.github.io/webdriver/#dfn-switch-to-parent-frame|
+   * POST /session/&amp;lt;session id&amp;gt;/frame/parent}
+   *
+   * @param {string} sessionId The session ID.
+   */
+  async switchToParentFrame(sessionId) {
+    let response = await request({
+      url: `${this.endpoint}/session/${sessionId}/frame/parent`,
+      method: 'POST',
+      json: {},
+    });
+    return response.value;
+  }
+
+  /**
+   * Find the element in the current frame.
+   *
+   * @see {@link
+   * https://w3c.github.io/webdriver/#dfn-find-element|
+   * POST /session/&amp;lt;session id&amp;gt;/element}
+   *
+   * @param {string} sessionId The session ID.
+   * @param {string} using Using
+   * @param {string} selector selector
+   * @return {Element} Element
+   */
+  async findElement(sessionId, using, selector) {
+    let response = await request({
+      url: `${this.endpoint}/session/${sessionId}/element`,
+      method: 'POST',
+      json: { using: using, value: selector },
+    });
+    return response.value;
+  }
+
+  /**
+   * Find the elements in the current frame.
+   *
+   * @see {@link
+   * https://w3c.github.io/webdriver/#dfn-find-elements|
+   * POST /session/&amp;lt;session id&amp;gt;/elements}
+   *
+   * @param {string} sessionId The session ID.
+   * @param {string} using Using
+   * @param {string} selector selector
+   * @return {Element[]} Elements
+   */
+  async findElements(sessionId, using, selector) {
+    let response = await request({
+      url: `${this.endpoint}/session/${sessionId}/elements`,
+      method: 'POST',
+      json: { using: using, value: selector },
+    });
+    return response.value;
+  }
+
+  /**
+   * Navigate to certain page on the current window.
+   *
+   * @see {@link
+   * https://w3c.github.io/webdriver/#dfn-navigate-to|
+   * POST /session/&amp;lt;session id&amp;gt;/url}
+   *
+   * @param {string} sessionId The session ID.
+   * @param {string} url The URL.
+   */
+  async navigateTo(sessionId, url) {
+    await request({
+      url: `${this.endpoint}/session/${sessionId}/url`,
+      method: 'POST',
+      json: { url },
+    });
+  }
+
+  /**
+   * Get the attribute value of the element.
+   *
+   * @see {@link
+   * https://w3c.github.io/webdriver/#dfn-get-element-attribute|
+   * GET /session/&amp;lt;session id&amp;gt;/element/&amp;lt;element id&amp;gt;/attribute/&amp;lt;name&amp;gt;}
+   *
+   * @param {string} sessionId The session ID.
+   * @param {string} elementId The element ID.
+   * @return {string} The attribute value of the element.
+   */
+  async getElementAttribute(sessionId, elementId, name) {
+    let response = await request({
+      url: `${this.endpoint}/session/${sessionId}/element/${elementId}/attribute/${name}`,
+      method: 'GET',
+      json: {},
+    });
+    return response.value;
+  }
+
+  /**
+   * Get CSS value of the element.
+   *
+   * @see {@link
+   * https://w3c.github.io/webdriver/#dfn-get-element-css-value|
+   * GET /session/&amp;lt;session id&amp;gt;element/&amp;lt;element id&amp;gt;css/&amp;lt;property name&amp;gt;}
+   *
+   * @param {string} sessionId The session ID.
+   * @param {string} elementId The element ID.
+   * @param {name} name The CSS key name.
+   * @return {string} The style value of the element.
+   */
+  async getElementStyle(sessionId, elementId, name) {
+    let response = await request({
+      url: `${this.endpoint}/session/${sessionId}/element/${elementId}/css/${name}`,
+      method: 'GET',
+      json: {},
+    });
+    return response.value;
+  }
+
+  /**
+   * Get the text of the element.
+   *
+   * @see {@link
+   * https://w3c.github.io/webdriver/#dfn-get-element-text|
+   * GET /session/&amp;lt;session id&amp;gt;/element/&amp;lt;element id&amp;gt;/text}
+   *
+   * @param {string} sessionId The session ID.
+   * @param {string} elementId The element ID.
+   * @return {string} Text content of the element.
+   */
+  async getElementText(sessionId, elementId) {
+    let response = await request({
+      url: `${this.endpoint}/session/${sessionId}/element/${elementId}/text`,
+      method: 'GET',
+      json: {},
+    });
+    return response.value;
+  }
+
+  /**
+   * Get the tag name of the element.
+   *
+   * @see {@link
+   * https://w3c.github.io/webdriver/#dfn-get-element-tag-name|
+   * GET /session/&amp;lt;session id&amp;gt;/element/&amp;lt;element id&amp;gt;/name}
+   *
+   * @param {string} sessionId The session ID.
+   * @param {string} elementId The element ID.
+   * @return {string} The tag name of the element.
+   */
+  async getElementTagName(sessionId, elementId) {
+    let response = await request({
+      url: `${this.endpoint}/session/${sessionId}/element/${elementId}/name`,
+      method: 'GET',
+      json: {},
+    });
+    return response.value;
+  }
+
+  /**
+   * Send key events of the element.
+   *
+   * @see {@link
+   * https://w3c.github.io/webdriver/#element-send-keys|
+   * POST /session/&amp;lt;session id&amp;gt;/element/&amp;lt;element id&amp;gt;/value}
+   *
+   * @param {string} sessionId The session ID.
+   * @param {string} elementId The element ID.
+   * @param [string...} keys THe keys to be sent.
+   */
+  async elementSendKeys(sessionId, elementId, ...keys) {
+    await request({
+      url: `${this.endpoint}/session/${sessionId}/element/${elementId}/value`,
+      method: 'POST',
+      json: {
+        text: keys.join(''),
+        value: keys,
+      },
+    });
+  }
+
+  /**
+   * Send click event of the element.
+   *
+   * @see {@link
+   * https://w3c.github.io/webdriver/#element-click|
+   * POST /session/&amp;lt;session id&amp;gt;/element/&amp;lt;element id&amp;gt;/click}
+   *
+   * @param {string} sessionId The session ID.
+   */
+  async elementClick(sessionId, elementId) {
+    await request({
+      url: `${this.endpoint}/session/${sessionId}/element/${elementId}/click`,
+      method: 'POST',
+      json: {},
+    });
+  }
+
+  /**
+   * Check if the element is displayed.
+   *
+   * @param {string} sessionId The session ID.
+   * @param {string} elementId The element ID.
+   * @return {boolean} &lt;code>true&lt;/code> if the element is displayed.
+   */
+  async isElementDisplayed(sessionId, elementId) {
+    let response = await request({
+      url: `${this.endpoint}/session/${sessionId}/element/${elementId}/displayed`,
+      method: 'GET',
+      json: {},
+    });
+    return response.value;
+  }
+
+  /**
+   * Check if the element is selected.
+   *
+   * @see {@link
+   * https://w3c.github.io/webdriver/#dfn-is-element-selected|
+   * GET /session/&amp;lt;session id&amp;gt;/element/&amp;lt;element id&amp;gt;/selected}
+   *
+   * @param {string} sessionId The session ID.
+   * @param {string} elementId The element ID.
+   * @return {boolean} &lt;code>true&lt;/code> if the element is selected.
+   */
+  async isElementSelected(sessionId, elementId) {
+    let response = await request({
+      url: `${this.endpoint}/session/${sessionId}/element/${elementId}/selected`,
+      method: 'GET',
+      json: {},
+    });
+    return response.value;
+  }
+
+  /**
+   * Execute scripts in the current context and returns the executed result.
+   *
+   * @see {@link
+   * https://w3c.github.io/webdriver/#dfn-execute-script|
+   * POST /session/&amp;lt;session id&amp;gt;/execute/sync}
+   *
+   * @param {string} sessionId The session ID.
+   * @param {string|function} script The script or function to be executed.
+   * @return {object} The result of the executed script.
+   */
+  async executeScript(sessionId, script) {
+    let scriptData = script;
+    if (typeof script === 'function') {
+      scriptData = 'return (' + script + ').apply(null, arguments);';
+    }
+    let response = await request({
+      url: `${this.endpoint}/session/${sessionId}/execute/sync`,
+      method: 'POST',
+      json: {
+        script: scriptData,
+        args: [],
+      }
+    });
+    return response.value;
+  }
+}
+
+module.exports = WebDriver;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AddonBuilder.html">AddonBuilder</a></li><li><a href="BadRequestError.html">BadRequestError</a></li><li><a href="Browser.html">Browser</a></li><li><a href="Element.html">Element</a></li><li><a href="GeckoDriver.html">GeckoDriver</a></li><li><a href="GeckoSession.html">GeckoSession</a></li><li><a href="HttpError.html">HttpError</a></li><li><a href="Logger.html">Logger</a></li><li><a href="Manifest.html">Manifest</a></li><li><a href="MessageClient.html">MessageClient</a></li><li><a href="MessageListener.html">MessageListener</a></li><li><a href="NotAcceptableError.html">NotAcceptableError</a></li><li><a href="NotFoundError.html">NotFoundError</a></li><li><a href="Server.html">Server</a></li><li><a href="Session.html">Session</a></li><li><a href="WebDriver.html">WebDriver</a></li></ul><h3>Global</h3><ul><li><a href="global.html#create">create</a></li><li><a href="global.html#createManifest">createManifest</a></li><li><a href="global.html#Keys">Keys</a></li><li><a href="global.html#maxArgs">maxArgs</a></li><li><a href="global.html#methods">methods</a></li><li><a href="global.html#minArgs">minArgs</a></li><li><a href="global.html#mkdirAllSync">mkdirAllSync</a></li><li><a href="global.html#removeManifest">removeManifest</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Apr 24 2019 21:39:52 GMT+0900 (Japan Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

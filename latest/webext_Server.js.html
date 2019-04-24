@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: webext/Server.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: webext/Server.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+const bodyParser = require('body-parser');
+const express = require('express');
+const metadata = require('./metadata');
+const http = require('http');
+const uuidv4 = require('uuid/v4');
+
+const newRequest = (body) => {
+  let id = uuidv4();
+  return { id, body };
+};
+
+const {
+  HttpError,
+  NotFoundError,
+  NotAcceptableError,
+  BadRequestError,
+} = require('./error');
+
+/**
+ * Server is an remote WebExtensions API server.  The server is a proxy for
+ * between firefox and the API client.
+ *
+ * The server listen on HTTP port to receive a HTTP request to invoke
+ * WebExtensions API.  The result of it is returned on the HTTP response.
+ * The server communicate with a browser via {@link
+ * https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_messaging
+ * native messaging}.
+ */
+class Server {
+
+  /**
+   * @param {string} address The address of the remote server.
+   * @param {number} port The port of the remote server.
+   * @param {MessageClient} client The native message client.on stdin.
+   * @param {MessageListener} listener The native message listener on stdout.
+   * @param {Logger} logger The logger.
+   */
+  // eslint-disable-next-line max-statements
+  constructor(address, port, client, listener, logger) {
+    let app = express();
+    app.use(bodyParser.json());
+    app.get('/health', this.handleHealth.bind(this));
+    app.put('/*', this.handleWebext.bind(this));
+    app.use(() => {
+      throw new NotFoundError('not found');
+    });
+    app.use((err, req, res, next) => {
+      if (err instanceof SyntaxError) {
+        res.status(400).send({ status: 400, message: err.message });
+      } else if (err instanceof HttpError) {
+        res.status(err.status).send({
+          status: err.status, message: err.message
+        });
+      } else if (err) {
+        res.status(500).send({ status: 500, message: err.message });
+      }
+      next(err);
+    });
+    app.use((_err, req, res) => {
+      logger.info(
+        `"${req.method} ${req.path}",`,
+        `${JSON.stringify(req.body)},`,
+        ` ${res.statusCode}`);
+    });
+
+    listener.onMessage(this.onMessage.bind(this));
+
+    this.address = address;
+    this.port = port;
+    this.app = app;
+    this.server = null;
+    this.client = client;
+    this.listener = listener;
+    this.logger = logger;
+    this.pool = {};
+  }
+
+  listen() {
+    this.listener.listen();
+    this.server = http.createServer(this.app);
+    this.server.on('listening', () => {
+      this.logger.info(`listening on ${this.address}:${this.port}`);
+    });
+    this.server.on('close', () => {
+      this.logger.info('server closed');
+    });
+    this.server.on('error', (err) => {
+      this.logger.error(`error`, err);
+    });
+    this.server.listen(this.port, this.address);
+  }
+
+  close() {
+    this.server.close();
+  }
+
+  handleWebext(req, res) {
+    if (!req.is('application/json')) {
+      throw new NotAcceptableError('only application/json is acceptable');
+    }
+
+    let method = req.path.slice(1);
+    if (!metadata.methods().includes(method)) {
+      throw new NotFoundError(`method '${method}' does not exits`);
+    }
+    if (!(req.body instanceof Array)) {
+      throw new BadRequestError('body does not an Array');
+    }
+
+    let msg = newRequest({
+      method: method,
+      params: req.body,
+    });
+    this.pool[msg.id] = res;
+    this.client.sendMessage(msg);
+  }
+
+  handleHealth(_req, res) {
+    res.status(200).send({ status: 200, message: 'ok' });
+  }
+
+  onMessage(message) {
+    if (!(message.id in this.pool)) {
+      this.logger.warn('unexpected message:', message);
+      return;
+    }
+    let httpResponse = this.pool[message.id];
+
+    delete this.pool[message.id];
+
+    if (!('success' in message)) {
+      httpResponse.status(520).send(
+        { status: 520, message: 'unknown response from browser' }
+      );
+      return;
+    }
+    if (message.success) {
+      // wrap result as an Array to return a Number
+      if (typeof message.result === 'undefined') {
+        // due to JSON.stringify() converts undefined to null
+        httpResponse.status(200).send([]);
+      } else {
+        httpResponse.status(200).send([message.result]);
+      }
+    } else {
+      httpResponse.status(520).send(
+        { status: 520, message: message.message }
+      );
+    }
+  }
+}
+
+module.exports = Server;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AddonBuilder.html">AddonBuilder</a></li><li><a href="BadRequestError.html">BadRequestError</a></li><li><a href="Browser.html">Browser</a></li><li><a href="Element.html">Element</a></li><li><a href="GeckoDriver.html">GeckoDriver</a></li><li><a href="GeckoSession.html">GeckoSession</a></li><li><a href="HttpError.html">HttpError</a></li><li><a href="Logger.html">Logger</a></li><li><a href="Manifest.html">Manifest</a></li><li><a href="MessageClient.html">MessageClient</a></li><li><a href="MessageListener.html">MessageListener</a></li><li><a href="NotAcceptableError.html">NotAcceptableError</a></li><li><a href="NotFoundError.html">NotFoundError</a></li><li><a href="Server.html">Server</a></li><li><a href="Session.html">Session</a></li><li><a href="WebDriver.html">WebDriver</a></li></ul><h3>Global</h3><ul><li><a href="global.html#create">create</a></li><li><a href="global.html#createManifest">createManifest</a></li><li><a href="global.html#Keys">Keys</a></li><li><a href="global.html#maxArgs">maxArgs</a></li><li><a href="global.html#methods">methods</a></li><li><a href="global.html#minArgs">minArgs</a></li><li><a href="global.html#mkdirAllSync">mkdirAllSync</a></li><li><a href="global.html#removeManifest">removeManifest</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Apr 24 2019 21:39:52 GMT+0900 (Japan Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

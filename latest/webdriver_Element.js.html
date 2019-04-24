@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: webdriver/Element.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: webdriver/Element.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+/**
+ * Element represents an element in the WebDriver.
+ *
+ * @example
+ * let session = await GeckoSession.create(new GeckoDriver())
+ * let elem = await session.findElement('body');
+ *
+ * await elem.sendKeys('a');  // send key event
+ * await elem.lick();         // send click event
+ */
+class Element {
+
+  /**
+   * @param {WebDriver} driver The client of the {@link WebDriver}
+   * @param {string} sessionId The session ID.
+   * @param {object} elementId The element ID
+   */
+  constructor(driver, sessionId, elementId) {
+    this.driver = driver;
+    this.sessionId = sessionId;
+    this.elementId = elementId;
+  }
+
+  /**
+   * Retrieves the attribute value of the element.
+   *
+   * @async
+   * @param {string} name The name of the attribute.
+   * @returns {string} The attribute value of the element.
+   */
+  getAttribute(name) {
+    return this.driver.getElementAttribute(
+      this.sessionId, Object.values(this.elementId)[0], name,
+    );
+  }
+
+  /**
+   * Retrieves the CSS value of the element.
+   *
+   * @async
+   * @param {string} name The name of the style.
+   * @returns {string} The style value of the element.
+   */
+  getStyle(name) {
+    return this.driver.getElementStyle(
+      this.sessionId, Object.values(this.elementId)[0], name,
+    );
+  }
+
+  /**
+   * Retrieves the text content of the element.
+   *
+   * @async
+   * @returns {string} Text content of the element.
+   */
+  getText() {
+    return this.driver.getElementText(
+      this.sessionId, Object.values(this.elementId)[0],
+    );
+  }
+
+  /**
+   * Retrieves the tag name of the element.
+   *
+   * @async
+   * @returns {string} The tag name of the element.
+   */
+  getTagName() {
+    return this.driver.getElementTagName(
+      this.sessionId, Object.values(this.elementId)[0],
+    );
+  }
+
+  /**
+   * Sends key events to the element.
+   *
+   * @example
+   * let input = await session.findElement('input');
+   * await input.sendKeys('hello')
+   * @example
+   * const { Key } = require('lanthan');
+   * let body = await session.findElement('body');
+   * // Send Ctrl+T
+   * await body.sendKeys(Key.Ctrl, 't');
+   *
+   * @async
+   * @param {...string} keys The key sequence to be sent.
+   */
+  sendKeys(...keys) {
+    return this.driver.elementSendKeys(
+      this.sessionId, Object.values(this.elementId)[0], ...keys
+    );
+  }
+
+  /**
+   * Sends click event to the element.
+   *
+   * @example
+   * let button = await session.findElement('button');
+   * await button.click()
+   * @async
+   */
+  click() {
+    return this.driver.elementClick(
+      this.sessionId, Object.values(this.elementId)[0],
+    );
+  }
+
+  /**
+   * Check if the element is displayed.
+   *
+   * @async
+   * @returns {boolean} &lt;code>true&lt;/code> if the element is displayed.
+   */
+  isDisplayed() {
+    return this.driver.isElementDisplayed(
+      this.sessionId, Object.values(this.elementId)[0],
+    );
+  }
+
+  /**
+   * Check if the element is selected.
+   *
+   * @async
+   * @returns {boolean} &lt;code>true&lt;/code> if the element is selected.
+   */
+  isSelected() {
+    return this.driver.isElementSelected(
+      this.sessionId, Object.values(this.elementId)[0],
+    );
+  }
+}
+
+module.exports = Element;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AddonBuilder.html">AddonBuilder</a></li><li><a href="BadRequestError.html">BadRequestError</a></li><li><a href="Browser.html">Browser</a></li><li><a href="Element.html">Element</a></li><li><a href="GeckoDriver.html">GeckoDriver</a></li><li><a href="GeckoSession.html">GeckoSession</a></li><li><a href="HttpError.html">HttpError</a></li><li><a href="Logger.html">Logger</a></li><li><a href="Manifest.html">Manifest</a></li><li><a href="MessageClient.html">MessageClient</a></li><li><a href="MessageListener.html">MessageListener</a></li><li><a href="NotAcceptableError.html">NotAcceptableError</a></li><li><a href="NotFoundError.html">NotFoundError</a></li><li><a href="Server.html">Server</a></li><li><a href="Session.html">Session</a></li><li><a href="WebDriver.html">WebDriver</a></li></ul><h3>Global</h3><ul><li><a href="global.html#create">create</a></li><li><a href="global.html#createManifest">createManifest</a></li><li><a href="global.html#Keys">Keys</a></li><li><a href="global.html#maxArgs">maxArgs</a></li><li><a href="global.html#methods">methods</a></li><li><a href="global.html#minArgs">minArgs</a></li><li><a href="global.html#mkdirAllSync">mkdirAllSync</a></li><li><a href="global.html#removeManifest">removeManifest</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Apr 24 2019 21:39:52 GMT+0900 (Japan Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

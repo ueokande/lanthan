@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: Manifest</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: Manifest</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>Manifest<span class="signature">(data)</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description">Manifest retrieves resources describe in the WebExtensions manifest.</div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+    <h2>Constructor</h2>
+    
+
+    
+    <h4 class="name" id="Manifest"><span class="type-signature"></span>new Manifest<span class="signature">(data)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The WebeExtensions manifest in JSON object.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="addon_Manifest.js.html">addon/Manifest.js</a>, <a href="addon_Manifest.js.html#line10">line 10</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>let manifest = new Manifest(fs.readFileSync('/path/to/manifest.json'));
+let resources = manifest.dependencies();</code></pre>
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="backgroundScripts"><span class="type-signature"></span>backgroundScripts<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;string>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Returns background scripts described in the manifest.
+
+If the manifest contains background script as the following:
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="addon_Manifest.js.html">addon/Manifest.js</a>, <a href="addon_Manifest.js.html#line36">line 36</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Background scripts described in the manifest.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;string></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>let manifest = new Manifest({
+  background: {
+    scripts: ['jquery.js', 'my-background.js']
+  }
+});
+
+// it returns `['jquery.js', 'my-background.js']`.
+let resources = manifest.backgroundScripts();</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="browserActionIcons"><span class="type-signature"></span>browserActionIcons<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;string>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Returns icon resources on browser action described in the manifest.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="addon_Manifest.js.html">addon/Manifest.js</a>, <a href="addon_Manifest.js.html#line115">line 115</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Icon paths on browser action in the manifest.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;string></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>let manifest = new Manifest({
+  'browser_action': {
+    'default_icon': {
+      '19': 'button/geo-19.png',
+      '38': 'button/geo-38.png'
+    },
+    'default_title': 'Whereami?',
+    'default_popup': 'popup/geo.html'
+  }
+});
+
+// it returns ['button/geo-19.png', 'button/geo-38.png']
+manifest.browserActionIcons();</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="browserActionPopup"><span class="type-signature"></span>browserActionPopup<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Returns the HTML resource on browser action described in the manifest
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="addon_Manifest.js.html">addon/Manifest.js</a>, <a href="addon_Manifest.js.html#line142">line 142</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The HTML path in the manifest.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>let manifest = new Manifest({
+  'browser_action': {
+    'default_icon': {
+      '19': 'button/geo-19.png',
+      '38': 'button/geo-38.png'
+    },
+    'default_title': 'Whereami?',
+    'default_popup': 'popup/geo.html'
+  }
+});
+
+// it returns 'popup/geo.html'
+manifest.browserActionPopup();</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="contentScripts"><span class="type-signature"></span>contentScripts<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;string>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Returns all content scripts described in the manifest.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="addon_Manifest.js.html">addon/Manifest.js</a>, <a href="addon_Manifest.js.html#line65">line 65</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The script paths in the manifest.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;string></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>let manifest = new Manifest({
+  'content_scripts': [
+    {
+      'exclude_matches': ['*://developer.mozilla.org/*'],
+      'matches': ['*://*.mozilla.org/*'],
+      'js': ['content1.js', 'content2.js']
+    }, {
+      'exclude_matches': ['https://google.com/*'],
+      'js': ['googler.js']
+    }
+  ]
+});
+
+// it returns ['content1.js', 'content2.js', 'googler.js']);
+manifest.contentScripts();</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="dependencies"><span class="type-signature"></span>dependencies<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;string>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Returns all resources described in the manifest.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="addon_Manifest.js.html">addon/Manifest.js</a>, <a href="addon_Manifest.js.html#line254">line 254</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The resource paths in the manifest.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;string></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>let manifest = new Manifest(fs.readFileSync('/path/to/manifest.json'));
+let resources = manifest.dependencies();</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="icons"><span class="type-signature"></span>icons<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;string>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Returns icon paths described in the manifest.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="addon_Manifest.js.html">addon/Manifest.js</a>, <a href="addon_Manifest.js.html#line88">line 88</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The icon paths in the manifest.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;string></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>let manifest = new Manifest({
+  'icons': {
+    '48': 'icon.png',
+    '96': 'icon@2x.png'
+  }
+});
+
+// it returns ['icon.png', 'icon@2x.png']
+manifest.icons();</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="optionsUiPage"><span class="type-signature"></span>optionsUiPage<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Returns option UI page in the manifest.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="addon_Manifest.js.html">addon/Manifest.js</a>, <a href="addon_Manifest.js.html#line238">line 238</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The path to option UI page in the manifest
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>let manifest = new Manifest({
+  'options_ui': {
+    'page': 'settings.html'
+  }
+})
+
+// it returns 'settings.html'
+manifest.optionsUiPage();</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="pageActionIcons"><span class="type-signature"></span>pageActionIcons<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;string>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Returns icon resources on page action described in the manifest.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="addon_Manifest.js.html">addon/Manifest.js</a>, <a href="addon_Manifest.js.html#line169">line 169</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The icon paths in the manifest.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;string></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>let manifest = new Manifest({
+  'page_action': {
+    'default_icon': {
+      '19': 'button/geo-19.png',
+      '38': 'button/geo-38.png'
+    },
+    'default_title': 'Whereami?',
+    'default_popup': 'popup/geo.html'
+  }
+});
+
+// it returns ['button/geo-19.png', 'button/geo-38.png']
+manifest.pageActionIcons();</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="pageActionPopup"><span class="type-signature"></span>pageActionPopup<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Returns the HTML resource on browser action described in the manifest.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="addon_Manifest.js.html">addon/Manifest.js</a>, <a href="addon_Manifest.js.html#line196">line 196</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The HTML path in the manifest.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>let manifest = new Manifest({
+  'page_action': {
+    'default_icon': {
+      '19': 'button/geo-19.png',
+      '38': 'button/geo-38.png'
+    },
+    'default_title': 'Whereami?',
+    'default_popup': 'popup/geo.html'
+  },
+});
+
+// it returns 'popup/geo.html'
+manifest.pageActionPopup();</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="webAccessibleResources"><span class="type-signature"></span>webAccessibleResources<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;string>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Returns the Web Accessible Resources in the manifest.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="addon_Manifest.js.html">addon/Manifest.js</a>, <a href="addon_Manifest.js.html#line216">line 216</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The resource paths in the manifest.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;string></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>let manifest = new Manifest({
+  'web_accessible_resources': ['images/my-image.png']
+});
+
+// it return 'images/my-image.png'
+manifest.webAccessibleResources();</code></pre>
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AddonBuilder.html">AddonBuilder</a></li><li><a href="BadRequestError.html">BadRequestError</a></li><li><a href="Browser.html">Browser</a></li><li><a href="Element.html">Element</a></li><li><a href="GeckoDriver.html">GeckoDriver</a></li><li><a href="GeckoSession.html">GeckoSession</a></li><li><a href="HttpError.html">HttpError</a></li><li><a href="Logger.html">Logger</a></li><li><a href="Manifest.html">Manifest</a></li><li><a href="MessageClient.html">MessageClient</a></li><li><a href="MessageListener.html">MessageListener</a></li><li><a href="NotAcceptableError.html">NotAcceptableError</a></li><li><a href="NotFoundError.html">NotFoundError</a></li><li><a href="Server.html">Server</a></li><li><a href="Session.html">Session</a></li><li><a href="WebDriver.html">WebDriver</a></li></ul><h3>Global</h3><ul><li><a href="global.html#create">create</a></li><li><a href="global.html#createManifest">createManifest</a></li><li><a href="global.html#Keys">Keys</a></li><li><a href="global.html#maxArgs">maxArgs</a></li><li><a href="global.html#methods">methods</a></li><li><a href="global.html#minArgs">minArgs</a></li><li><a href="global.html#mkdirAllSync">mkdirAllSync</a></li><li><a href="global.html#removeManifest">removeManifest</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Apr 24 2019 21:39:52 GMT+0900 (Japan Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

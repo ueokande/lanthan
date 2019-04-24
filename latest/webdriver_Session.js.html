@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: webdriver/Session.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: webdriver/Session.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+const Element = require('./Element');
+
+/**
+ * Session is an base class for the WebDriver.
+ */
+class Session {
+
+  /**
+   * @param {string} sessionId The session ID.
+   * @param {WebDriver} driver The client of the WebDriver.
+   */
+  constructor(sessionId, driver) {
+    this.sessionId = sessionId;
+    this.driver = driver;
+  }
+
+  /**
+   * Closes current session of the WebDriver.
+   */
+  async close() {
+    await this.driver.deleteSession(this.sessionId);
+  }
+
+  /**
+   * Retrieves element from the current context by CSS selector.
+   *
+   * @param {string} css The CSS selector.
+   * @return {Element} The retrieved element.
+   */
+  async findElementByCSS(css) {
+    let id = await this.driver.findElement(this.sessionId, 'css selector', css);
+    return new Element(this.driver, this.sessionId, id);
+  }
+
+  /**
+   * Retrieves elements from the current context by CSS selector.
+   *
+   * @param {string} css The CSS selector.
+   * @return {Element} The retrieved elements.
+   */
+  async findElementsByCSS(css) {
+    let ids = await this.driver.findElements(
+      this.sessionId, 'css selector', css);
+    return ids.map(id => new Element(this.driver, this.sessionId, id));
+  }
+
+  /**
+   * Navigates to the page on the current session.
+   *
+   * @param {string} url The URL to be navigated.
+   */
+  async navigateTo(url) {
+    await this.driver.navigateTo(this.sessionId, url);
+  }
+
+  /**
+   * Create new window.
+   *
+   * @async
+   * @param {string=} url
+   * @param {type=} [type="tab"] The open type ("window" or "tab", default to "tab")
+   */
+  newWindow(url = undefined, type = 'tab') {
+    return this.driver.newWindow(this.sessionId, url, type);
+  }
+
+  /**
+   * Select the current window.
+   *
+   * @async
+   * @param {string=} url
+   * @param {type=} [type="tab"] The open type ("window" or "tab", default to "tab")
+   */
+  switchToWindow(handle) {
+    return this.driver.switchToWindow(this.sessionId, handle);
+  }
+
+  /**
+   * Get all window handles.
+   *
+   * @async
+   * @return {string[]} The window handles.
+   */
+  getWindowHandles() {
+    return this.driver.getWindowHandles(this.sessionId);
+  }
+
+  /**
+   * Get current window handle.
+   *
+   * @async
+   * @returns {string} The current window handle.
+   */
+  getWindowHandle() {
+    return this.driver.getWindowHandle(this.sessionId);
+  }
+
+  /**
+   * Select the current frame in the window.
+   *
+   * @async
+   */
+  switchToFrame(id) {
+    return this.driver.switchToFrame(this.sessionId, id);
+  }
+
+  /**
+   * Select the top frame in the window.
+   *
+   * @async
+   */
+  switchToParentFrame() {
+    return this.driver.switchToParentFrame(this.sessionId);
+  }
+
+  /**
+   * Execute scripts in the current context and returns the executed result.
+   * The script can be string, or JavaScript function.
+   *
+   * @example
+   * // execute script by string
+   * await session.executeScript(`document.querySelector('#description').value`)
+   *
+   * // execute scripts by function
+   * await session.executeScript(() => document.querySelector('#description').value)
+   * @async
+   * @param {string|function} script The script or function to be executed.
+   * @return {object} The result of the executed script.
+   */
+  executeScript(script) {
+    return this.driver.executeScript(this.sessionId, script);
+  }
+}
+
+module.exports = Session;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AddonBuilder.html">AddonBuilder</a></li><li><a href="BadRequestError.html">BadRequestError</a></li><li><a href="Browser.html">Browser</a></li><li><a href="Element.html">Element</a></li><li><a href="GeckoDriver.html">GeckoDriver</a></li><li><a href="GeckoSession.html">GeckoSession</a></li><li><a href="HttpError.html">HttpError</a></li><li><a href="Logger.html">Logger</a></li><li><a href="Manifest.html">Manifest</a></li><li><a href="MessageClient.html">MessageClient</a></li><li><a href="MessageListener.html">MessageListener</a></li><li><a href="NotAcceptableError.html">NotAcceptableError</a></li><li><a href="NotFoundError.html">NotFoundError</a></li><li><a href="Server.html">Server</a></li><li><a href="Session.html">Session</a></li><li><a href="WebDriver.html">WebDriver</a></li></ul><h3>Global</h3><ul><li><a href="global.html#create">create</a></li><li><a href="global.html#createManifest">createManifest</a></li><li><a href="global.html#Keys">Keys</a></li><li><a href="global.html#maxArgs">maxArgs</a></li><li><a href="global.html#methods">methods</a></li><li><a href="global.html#minArgs">minArgs</a></li><li><a href="global.html#mkdirAllSync">mkdirAllSync</a></li><li><a href="global.html#removeManifest">removeManifest</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Apr 24 2019 21:39:52 GMT+0900 (Japan Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

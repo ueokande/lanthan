@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: addon/Manifest.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: addon/Manifest.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+/**
+ * Manifest retrieves resources describe in the WebExtensions manifest.
+ *
+ * @example
+ * let manifest = new Manifest(fs.readFileSync('/path/to/manifest.json'));
+ * let resources = manifest.dependencies();
+ */
+class Manifest {
+
+  /**
+   * @param {object} data The WebeExtensions manifest in JSON object.
+   */
+  constructor(data) {
+    this.manifest = data;
+  }
+
+  /**
+   * Returns background scripts described in the manifest.
+   *
+   * If the manifest contains background script as the following:
+   *
+   * @example
+   * let manifest = new Manifest({
+   *   background: {
+   *     scripts: ['jquery.js', 'my-background.js']
+   *   }
+   * });
+   *
+   * // it returns `['jquery.js', 'my-background.js']`.
+   * let resources = manifest.backgroundScripts();
+   *
+   * @returns {string[]} Background scripts described in the manifest.
+   */
+  backgroundScripts() {
+    if (!('background' in this.manifest) || !('scripts' in this.manifest.background)) {
+      return [];
+    }
+    return this.manifest.background.scripts;
+  }
+
+  /**
+   * Returns all content scripts described in the manifest.
+   *
+   * @example
+   * let manifest = new Manifest({
+   *   'content_scripts': [
+   *     {
+   *       'exclude_matches': ['*://developer.mozilla.org/*'],
+   *       'matches': ['*://*.mozilla.org/*'],
+   *       'js': ['content1.js', 'content2.js']
+   *     }, {
+   *       'exclude_matches': ['https://google.com/*'],
+   *       'js': ['googler.js']
+   *     }
+   *   ]
+   * });
+   *
+   * // it returns ['content1.js', 'content2.js', 'googler.js']);
+   * manifest.contentScripts();
+   *
+   * @returns {string[]} The script paths in the manifest.
+   */
+  contentScripts() {
+    if (!('content_scripts' in this.manifest)) {
+      return [];
+    }
+    return this.manifest.content_scripts.map(cs => cs.js).reduce((a1, a2) => a1.concat(a2));
+  }
+
+  /**
+   * Returns icon paths described in the manifest.
+   *
+   * @example
+   * let manifest = new Manifest({
+   *   'icons': {
+   *     '48': 'icon.png',
+   *     '96': 'icon@2x.png'
+   *   }
+   * });
+   *
+   * // it returns ['icon.png', 'icon@2x.png']
+   * manifest.icons();
+   *
+   * @returns {string[]} The icon paths in the manifest.
+   */
+  icons() {
+    if (!('icons' in this.manifest)) {
+      return [];
+    }
+    return Object.values(this.manifest.icons);
+  }
+
+  /**
+   * Returns icon resources on browser action described in the manifest.
+   *
+   * @example
+   * let manifest = new Manifest({
+   *   'browser_action': {
+   *     'default_icon': {
+   *       '19': 'button/geo-19.png',
+   *       '38': 'button/geo-38.png'
+   *     },
+   *     'default_title': 'Whereami?',
+   *     'default_popup': 'popup/geo.html'
+   *   }
+   * });
+   *
+   * // it returns ['button/geo-19.png', 'button/geo-38.png']
+   * manifest.browserActionIcons();
+   *
+   * @returns {string[]} Icon paths on browser action in the manifest.
+   */
+  browserActionIcons() {
+    if (!('browser_action' in this.manifest) || !('default_icon' in this.manifest.browser_action)) {
+      return [];
+    }
+    return Object.values(this.manifest.browser_action.default_icon);
+  }
+
+  /**
+   * Returns the HTML resource on browser action described in the manifest
+   *
+   * @example
+   * let manifest = new Manifest({
+   *   'browser_action': {
+   *     'default_icon': {
+   *       '19': 'button/geo-19.png',
+   *       '38': 'button/geo-38.png'
+   *     },
+   *     'default_title': 'Whereami?',
+   *     'default_popup': 'popup/geo.html'
+   *   }
+   * });
+   *
+   * // it returns 'popup/geo.html'
+   * manifest.browserActionPopup();
+   *
+   * @returns {string} The HTML path in the manifest.
+   */
+  browserActionPopup() {
+    if (!('browser_action' in this.manifest) || !('default_popup' in this.manifest.browser_action)) {
+      return null;
+    }
+    return this.manifest.browser_action.default_popup;
+  }
+
+  /**
+   * Returns icon resources on page action described in the manifest.
+   *
+   * @example
+   * let manifest = new Manifest({
+   *   'page_action': {
+   *     'default_icon': {
+   *       '19': 'button/geo-19.png',
+   *       '38': 'button/geo-38.png'
+   *     },
+   *     'default_title': 'Whereami?',
+   *     'default_popup': 'popup/geo.html'
+   *   }
+   * });
+   *
+   * // it returns ['button/geo-19.png', 'button/geo-38.png']
+   * manifest.pageActionIcons();
+   *
+   * @returns {string[]} The icon paths in the manifest.
+   */
+  pageActionIcons() {
+    if (!('page_action' in this.manifest) || !('default_icon' in this.manifest.page_action)) {
+      return [];
+    }
+    return Object.values(this.manifest.page_action.default_icon);
+  }
+
+  /**
+   * Returns the HTML resource on browser action described in the manifest.
+   *
+   * @example
+   * let manifest = new Manifest({
+   *   'page_action': {
+   *     'default_icon': {
+   *       '19': 'button/geo-19.png',
+   *       '38': 'button/geo-38.png'
+   *     },
+   *     'default_title': 'Whereami?',
+   *     'default_popup': 'popup/geo.html'
+   *   },
+   * });
+   *
+   * // it returns 'popup/geo.html'
+   * manifest.pageActionPopup();
+   *
+   * @returns {string} The HTML path in the manifest.
+   */
+  pageActionPopup() {
+    if (!('page_action' in this.manifest) || !('default_popup' in this.manifest.page_action)) {
+      return null;
+    }
+    return this.manifest.page_action.default_popup;
+  }
+
+  /**
+   * Returns the Web Accessible Resources in the manifest.
+   *
+   * @example
+   * let manifest = new Manifest({
+   *   'web_accessible_resources': ['images/my-image.png']
+   * });
+   *
+   * // it return 'images/my-image.png'
+   * manifest.webAccessibleResources();
+   *
+   * @returns {string[]} The resource paths in the manifest.
+   */
+  webAccessibleResources() {
+    if (!('web_accessible_resources' in this.manifest)) {
+      return [];
+    }
+    return this.manifest.web_accessible_resources;
+  }
+
+  /**
+   * Returns option UI page in the manifest.
+   *
+   * @example
+   * let manifest = new Manifest({
+   *   'options_ui': {
+   *     'page': 'settings.html'
+   *   }
+   * })
+   *
+   * // it returns 'settings.html'
+   * manifest.optionsUiPage();
+   *
+   * @returns {string} The path to option UI page in the manifest
+   */
+  optionsUiPage() {
+    if (!('options_ui' in this.manifest) || !('page' in this.manifest.options_ui)) {
+      return null;
+    }
+    return this.manifest.options_ui.page;
+  }
+
+  /**
+   * Returns all resources described in the manifest.
+   *
+   * @example
+   * let manifest = new Manifest(fs.readFileSync('/path/to/manifest.json'));
+   * let resources = manifest.dependencies();
+   *
+   * @returns {string[]} The resource paths in the manifest.
+   */
+  dependencies() {
+    let set = new Set();
+    this.backgroundScripts().forEach(f => set.add(f));
+    this.contentScripts().forEach(f => set.add(f));
+    this.icons().forEach(f => set.add(f));
+    this.browserActionIcons().forEach(f => set.add(f));
+    set.add(this.browserActionPopup());
+    this.pageActionIcons().forEach(f => set.add(f));
+    set.add(this.pageActionPopup());
+    this.webAccessibleResources().forEach(f => set.add(f));
+    set.add(this.optionsUiPage());
+    set.delete(null);
+    return Array.from(set);
+  }
+}
+
+module.exports = Manifest;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AddonBuilder.html">AddonBuilder</a></li><li><a href="BadRequestError.html">BadRequestError</a></li><li><a href="Browser.html">Browser</a></li><li><a href="Element.html">Element</a></li><li><a href="GeckoDriver.html">GeckoDriver</a></li><li><a href="GeckoSession.html">GeckoSession</a></li><li><a href="HttpError.html">HttpError</a></li><li><a href="Logger.html">Logger</a></li><li><a href="Manifest.html">Manifest</a></li><li><a href="MessageClient.html">MessageClient</a></li><li><a href="MessageListener.html">MessageListener</a></li><li><a href="NotAcceptableError.html">NotAcceptableError</a></li><li><a href="NotFoundError.html">NotFoundError</a></li><li><a href="Server.html">Server</a></li><li><a href="Session.html">Session</a></li><li><a href="WebDriver.html">WebDriver</a></li></ul><h3>Global</h3><ul><li><a href="global.html#create">create</a></li><li><a href="global.html#createManifest">createManifest</a></li><li><a href="global.html#Keys">Keys</a></li><li><a href="global.html#maxArgs">maxArgs</a></li><li><a href="global.html#methods">methods</a></li><li><a href="global.html#minArgs">minArgs</a></li><li><a href="global.html#mkdirAllSync">mkdirAllSync</a></li><li><a href="global.html#removeManifest">removeManifest</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Apr 24 2019 21:39:52 GMT+0900 (Japan Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
