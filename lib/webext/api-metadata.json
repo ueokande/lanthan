@@ -449,6 +449,10 @@
     "setUninstallURL": {
       "minArgs": 1,
       "maxArgs": 1
+    },
+    "getURL": {
+      "minArgs": 1,
+      "maxArgs": 1
     }
   },
   "sessions": {
