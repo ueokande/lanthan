@@ -8,7 +8,7 @@ const AddonBuilder = require('../../lib/addon/AddonBuilder');
 
 describe('AddonBuilder', () => {
   describe('#build', () => {
-    it('should returns built addon', async() => {
+    it('should returns built driver', async() => {
       let builder = new AddonBuilder(path.join(__dirname, 'testdata'));
       let data = await builder.build();
 
@@ -36,7 +36,7 @@ describe('AddonBuilder', () => {
       assert(added.startsWith(`'use strict';`));
     });
 
-    it('should add file with path within addon directory', async() => {
+    it('should add file with path within driver directory', async() => {
       let builder = new AddonBuilder(path.join(__dirname, 'testdata'));
       builder.addFile(path.join(__dirname, 'testdata', 'additional.js'));
       let data = await builder.build();

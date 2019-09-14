@@ -4,13 +4,13 @@ const assert = require('assert');
 const Manifest = require('../../lib/addon/Manifest');
 
 const fullManifest = {
-  'name': 'my-addon',
-  'description': 'this is my addon',
+  'name': 'my-driver',
+  'description': 'this is my driver',
   'version': '0.1',
 
   'browser_specific_settings': {
     'gecko': {
-      'id': 'addon@example.com',
+      'id': 'driver@example.com',
       'strict_min_version': '42.0'
     }
   },

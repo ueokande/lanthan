@@ -1,6 +1,6 @@
 'use strict';
 
-const MessageClient = require('../../lib/webext/MessageClient');
+const MessageClient = require('../../lib/driver/MessageClient');
 const assert = require('assert');
 const os = require('os');
 const path = require('path');

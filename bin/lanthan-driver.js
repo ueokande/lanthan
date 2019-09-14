@@ -8,10 +8,10 @@ const path = require('path');
 const os = require('os');
 
 const config = require('../lib/config');
-const MessageClient = require('../lib/webext/MessageClient');
-const MessageListener = require('../lib/webext/MessageListener');
-const Logger = require('../lib/webext/Logger');
-const Server = require('../lib/webext/Server');
+const MessageClient = require('../lib/driver/MessageClient');
+const MessageListener = require('../lib/driver/MessageListener');
+const Logger = require('../lib/driver/Logger');
+const Server = require('../lib/driver/Server');
 
 const defaultConfigPath = path.join(os.tmpdir(), 'lanthan-driver.json');
 

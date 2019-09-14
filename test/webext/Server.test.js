@@ -1,6 +1,6 @@
 'use strict';
 
-const Server = require('../../lib/webext/Server');
+const Server = require('../../lib/driver/Server');
 const assert = require('assert');
 const request = require('request-promise-native');
 
