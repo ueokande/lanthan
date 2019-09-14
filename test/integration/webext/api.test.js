@@ -1,33 +1,33 @@
 'use strict';
 
-const lanthan = require('../../../lib');
+const { Builder } = require('../../../lib');
 const assert = require('assert');
 const server = require('../server');
 
 describe('webext', () => {
   let http;
-  let firefox;
-  let session;
+  let lanthan;
 
   before(async() => {
     let sv = server.newApp();
     http = sv.listen(10101, '127.0.0.1');
 
-    firefox = await lanthan.firefox();
-    session = firefox.session;
+    lanthan = await Builder.forBrowser('firefox').build();
   });
 
   after(async() => {
-    if (firefox) {
-      await firefox.close();
+    if (lanthan) {
+      await lanthan.quit();
     }
     http.close();
   });
 
   it('should invoke WebExtensions APIs', async() => {
-    await session.navigateTo('http://127.0.0.1:10101/#1');
+    let webdriver = lanthan.getWebDriver();
 
-    let browser = firefox.browser;
+    await webdriver.navigate().to('http://127.0.0.1:10101/#1');
+
+    let browser = lanthan.getWebExtBrowser();
     let tabs = await browser.tabs.query({});
     assert(tabs.length === 1);
     assert(tabs[0].url === 'http://127.0.0.1:10101/#1');
@@ -39,7 +39,7 @@ describe('webext', () => {
   });
 
   it('should returns error from browser', async() => {
-    let browser = firefox.browser;
+    let browser = lanthan.getWebExtBrowser();
     try {
       await browser.tabs.query();
       assert.fail('unexpected success');
