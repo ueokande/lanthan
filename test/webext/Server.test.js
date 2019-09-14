@@ -94,12 +94,12 @@ describe('Server', () => {
 
       let resp = await promise;
 
-      assert(resp.statusCode === 200);
-      assert(resp.body[0] === 'message from browser');
+      assert.strictEqual(resp.statusCode, 200);
+      assert.strictEqual(resp.body[0], 'message from browser');
 
-      assert(client.messages.length === 1);
+      assert.strictEqual(client.messages.length, 1);
       assert(typeof client.messages[0].id === 'string');
-      assert.deepEqual(client.messages[0].body, {
+      assert.deepStrictEqual(client.messages[0].body, {
         method: 'browser.tabs.query',
         params: [1, 'b', null],
       });
@@ -122,8 +122,8 @@ describe('Server', () => {
 
       let resp = await promise;
 
-      assert(resp.statusCode === 200);
-      assert(resp.body[0] === undefined);
+      assert.strictEqual(resp.statusCode, 200);
+      assert.strictEqual(resp.body[0], undefined);
     });
 
     it('should send messages and receive an error with message', async() => {
@@ -146,8 +146,8 @@ describe('Server', () => {
         await promise;
       } catch (e) {
         let resp = e.response;
-        assert(resp.statusCode === 520);
-        assert.deepEqual(resp.body, { status: 520, message: 'error occurs' });
+        assert.strictEqual(resp.statusCode, 520);
+        assert.deepStrictEqual(resp.body, { status: 520, message: 'error occurs' });
       }
     });
 
@@ -167,8 +167,8 @@ describe('Server', () => {
         await promise;
       } catch (e) {
         let resp = e.response;
-        assert(resp.statusCode === 520);
-        assert.deepEqual(resp.body, { status: 520, message: 'unknown response from browser' });
+        assert.strictEqual(resp.statusCode, 520);
+        assert.deepStrictEqual(resp.body, { status: 520, message: 'unknown response from browser' });
       }
     });
 
@@ -183,9 +183,9 @@ describe('Server', () => {
         throw new Error('expected error');
       } catch (e) {
         let resp = e.response;
-        assert(resp.statusCode === 404);
-        assert(resp.body.status === 404);
-        assert(typeof resp.body.message, 'string');
+        assert.strictEqual(resp.statusCode, 404);
+        assert.strictEqual(resp.body.status, 404);
+        assert.strictEqual(typeof resp.body.message, 'string');
       }
     });
 
@@ -200,9 +200,9 @@ describe('Server', () => {
         throw new Error('expected error');
       } catch (e) {
         let resp = e.response;
-        assert(resp.statusCode === 400);
-        assert(resp.body.status === 400);
-        assert(typeof resp.body.message, 'string');
+        assert.strictEqual(resp.statusCode, 400);
+        assert.strictEqual(resp.body.status, 400);
+        assert.strictEqual(typeof resp.body.message, 'string');
       }
     });
 
@@ -219,9 +219,9 @@ describe('Server', () => {
       } catch (e) {
         let resp = e.response;
         let body = JSON.parse(resp.body);
-        assert(resp.statusCode === 400);
-        assert(body.status === 400);
-        assert(typeof resp.body.message, 'string');
+        assert.strictEqual(resp.statusCode, 400);
+        assert.strictEqual(body.status, 400);
+        assert.strictEqual(typeof body.message, 'string');
       }
     });
   });

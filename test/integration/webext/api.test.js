@@ -4,7 +4,7 @@ const { Builder } = require('../../../lib');
 const assert = require('assert');
 const server = require('../server');
 
-describe('webext', () => {
+describe('webext integration', () => {
   let http;
   let lanthan;
 
@@ -29,13 +29,13 @@ describe('webext', () => {
 
     let browser = lanthan.getWebExtBrowser();
     let tabs = await browser.tabs.query({});
-    assert(tabs.length === 1);
-    assert(tabs[0].url === 'http://127.0.0.1:10101/#1');
+    assert.strictEqual(tabs.length, 1);
+    assert.strictEqual(tabs[0].url, 'http://127.0.0.1:10101/#1');
 
     await browser.tabs.create({ url: 'http://127.0.0.1:10101/#2' });
 
     tabs = await browser.tabs.query({});
-    assert(tabs.length === 2);
+    assert.strictEqual(tabs.length, 2);
   });
 
   it('should returns error from browser', async() => {
@@ -44,7 +44,7 @@ describe('webext', () => {
       await browser.tabs.query();
       assert.fail('unexpected success');
     } catch (e) {
-      assert(e.message === 'Incorrect argument types for tabs.query.');
+      assert.strictEqual(e.message, 'Incorrect argument types for tabs.query.');
     }
   });
 });

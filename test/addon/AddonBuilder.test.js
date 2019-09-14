@@ -14,13 +14,13 @@ describe('AddonBuilder', () => {
 
       let zip = await JSZip.loadAsync(data);
       let manifest = JSON.parse(await zip.file('manifest.json').async('string'));
-      assert.equal(manifest.name, 'lanthan-driver');
+      assert.strictEqual(manifest.name, 'lanthan-driver');
 
       let background = await zip.file('background.js').async('string');
-      assert.equal(background, `/* this is a background script */
+      assert.strictEqual(background, `/* this is a background script */
 `);
 
-      assert.equal(zip.file('additional.js'), null);
+      assert.strictEqual(zip.file('additional.js'), null);
     });
   });
 
@@ -43,7 +43,7 @@ describe('AddonBuilder', () => {
 
       let zip = await JSZip.loadAsync(data);
       let added = await zip.file('additional.js').async('string');
-      assert.equal(added, `/* this is an additional file */
+      assert.strictEqual(added, `/* this is an additional file */
 `);
     });
 
@@ -67,7 +67,7 @@ describe('AddonBuilder', () => {
       assert(added.startsWith(`'use strict';`));
 
       let manifest = JSON.parse(await zip.file('manifest.json').async('string'));
-      assert.deepEqual(manifest.background.scripts.sort(),
+      assert.deepStrictEqual(manifest.background.scripts.sort(),
         ['background.js', 'AddonBuilder.test.js'].sort());
     });
   });
@@ -96,7 +96,7 @@ describe('AddonBuilder', () => {
 
       let zip = await JSZip.loadAsync(data);
       let manifest = JSON.parse(await zip.file('manifest.json').async('string'));
-      assert.equal(manifest.applications.gecko.id, 'foobar@example.com');
+      assert.deepStrictEqual(manifest.applications.gecko.id, 'foobar@example.com');
     });
   });
 });

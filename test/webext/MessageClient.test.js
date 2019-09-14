@@ -36,15 +36,15 @@ describe('MessageClient', () => {
       let data1 = raw.slice(4, 4 + len1);
       let obj1 = JSON.parse(data1);
 
-      assert(obj1.name === 'alice');
-      assert(obj1.age === 12);
+      assert.strictEqual(obj1.name, 'alice');
+      assert.strictEqual(obj1.age, 12);
 
       let len2 = raw.slice(4 + len1, 4 + len1 + 4).readUInt32LE();
       let data2 = raw.slice(4 + len1 + 4, 4 + len1 + 4 + len2);
       let obj2 = JSON.parse(data2);
 
-      assert(obj2.name === 'bob');
-      assert(obj2.age === 14);
+      assert.strictEqual(obj2.name, 'bob');
+      assert.strictEqual(obj2.age, 14);
     });
   });
 });

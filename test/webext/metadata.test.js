@@ -13,7 +13,7 @@ describe('metadata', () => {
   describe('#minArgs', () => {
     it('should return 1 for "browser.tabs.update"', () => {
       let n = metadata.minArgs('browser.tabs.update');
-      assert(n === 1);
+      assert.strictEqual(n, 1);
     });
 
     it('should throw RangeError if the method does not exits', () => {
@@ -24,7 +24,7 @@ describe('metadata', () => {
   describe('#maxArgs', () => {
     it('should return 2 for "browser.tabs.update"', () => {
       let n = metadata.maxArgs('browser.tabs.update');
-      assert(n === 2);
+      assert.strictEqual(n, 2);
     });
 
     it('should throw RangeError if the method does not exits', () => {

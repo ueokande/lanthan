@@ -84,115 +84,115 @@ describe('Manifest', () => {
   describe('#backgroundScripts', () => {
     it('should return background script paths', () => {
       let manifest = new Manifest(fullManifest);
-      assert.deepEqual(manifest.backgroundScripts(), ['jquery.js', 'my-background.js']);
+      assert.deepStrictEqual(manifest.backgroundScripts(), ['jquery.js', 'my-background.js']);
     });
 
     it('should return empty if background field not present', () => {
       let manifest = new Manifest(emptyManifest);
-      assert.equal(manifest.backgroundScripts().length, 0);
+      assert.strictEqual(manifest.backgroundScripts().length, 0);
     });
   });
 
   describe('#contentScripts', () => {
     it('should return content script paths', () => {
       let manifest = new Manifest(fullManifest);
-      assert.deepEqual(manifest.contentScripts(), ['content1.js', 'content2.js', 'googler.js']);
+      assert.deepStrictEqual(manifest.contentScripts(), ['content1.js', 'content2.js', 'googler.js']);
     });
 
     it('should return empty if content_scripts field not present', () => {
       let manifest = new Manifest(emptyManifest);
-      assert.equal(manifest.contentScripts().length, 0);
+      assert.strictEqual(manifest.contentScripts().length, 0);
     });
   });
 
   describe('#icons', () => {
     it('should return icon paths', () => {
       let manifest = new Manifest(fullManifest);
-      assert.deepEqual(manifest.icons(), ['icon.png', 'icon@2x.png']);
+      assert.deepStrictEqual(manifest.icons(), ['icon.png', 'icon@2x.png']);
     });
 
     it('should return empty if icons field not present', () => {
       let manifest = new Manifest(emptyManifest);
-      assert.equal(manifest.icons().length, 0);
+      assert.strictEqual(manifest.icons().length, 0);
     });
   });
 
   describe('#browserActionIcons', () => {
     it('should return icon paths on browser actions', () => {
       let manifest = new Manifest(fullManifest);
-      assert.deepEqual(manifest.browserActionIcons(), ['button/geo-19.png', 'button/geo-38.png']);
+      assert.deepStrictEqual(manifest.browserActionIcons(), ['button/geo-19.png', 'button/geo-38.png']);
     });
 
     it('should return empty if browser_action field not present', () => {
       let manifest = new Manifest(emptyManifest);
-      assert.equal(manifest.browserActionIcons().length, 0);
+      assert.strictEqual(manifest.browserActionIcons().length, 0);
     });
   });
 
   describe('#browserActionPopup', () => {
     it('should return a popup path on browser actions', () => {
       let manifest = new Manifest(fullManifest);
-      assert.deepEqual(manifest.browserActionPopup(), 'popup/geo.html');
+      assert.deepStrictEqual(manifest.browserActionPopup(), 'popup/geo.html');
     });
 
     it('should return null if browser_action field not present', () => {
       let manifest = new Manifest(emptyManifest);
-      assert.equal(manifest.browserActionPopup(), null);
+      assert.strictEqual(manifest.browserActionPopup(), null);
     });
   });
 
   describe('#pageActionIcons', () => {
     it('should return icon paths on page actions', () => {
       let manifest = new Manifest(fullManifest);
-      assert.deepEqual(manifest.pageActionIcons(), ['button/geo-19.png', 'button/geo-38.png']);
+      assert.deepStrictEqual(manifest.pageActionIcons(), ['button/geo-19.png', 'button/geo-38.png']);
     });
 
     it('should return empty if page_action field not present', () => {
       let manifest = new Manifest(emptyManifest);
-      assert.equal(manifest.pageActionIcons().length, 0);
+      assert.strictEqual(manifest.pageActionIcons().length, 0);
     });
   });
 
   describe('#pageActionPopup', () => {
     it('should return a popup path on page actions', () => {
       let manifest = new Manifest(fullManifest);
-      assert.deepEqual(manifest.pageActionPopup(), 'popup/geo.html');
+      assert.deepStrictEqual(manifest.pageActionPopup(), 'popup/geo.html');
     });
 
     it('should return null if page_action field not present', () => {
       let manifest = new Manifest(emptyManifest);
-      assert.equal(manifest.pageActionPopup(), null);
+      assert.strictEqual(manifest.pageActionPopup(), null);
     });
   });
 
   describe('#webAccessibleResources', () => {
     it('should return paths of the Web Accessible Resources', () => {
       let manifest = new Manifest(fullManifest);
-      assert.deepEqual(manifest.webAccessibleResources(), ['images/my-image.png']);
+      assert.deepStrictEqual(manifest.webAccessibleResources(), ['images/my-image.png']);
     });
 
     it('should return empty if web_accessible_resources field not present', () => {
       let manifest = new Manifest(emptyManifest);
-      assert.equal(manifest.webAccessibleResources().length, 0);
+      assert.strictEqual(manifest.webAccessibleResources().length, 0);
     });
   });
 
   describe('#optionsUiPage', () => {
     it('should return a path of the options page', () => {
       let manifest = new Manifest(fullManifest);
-      assert.deepEqual(manifest.optionsUiPage(), 'settings.html');
+      assert.deepStrictEqual(manifest.optionsUiPage(), 'settings.html');
     });
 
     it('should return empty if options_ui field not present', () => {
       let manifest = new Manifest(emptyManifest);
-      assert.equal(manifest.optionsUiPage(), null);
+      assert.strictEqual(manifest.optionsUiPage(), null);
     });
   });
 
   describe('#dependencies', () => {
     it('should return all dependency paths', () => {
       let manifest = new Manifest(fullManifest);
-      assert.deepEqual(manifest.dependencies(), [
+      assert.deepStrictEqual(manifest.dependencies(), [
         'jquery.js', 'my-background.js',
         'content1.js', 'content2.js', 'googler.js',
         'icon.png', 'icon@2x.png',
@@ -205,7 +205,7 @@ describe('Manifest', () => {
 
     it('should return empty if web_accessible_resources field not present', () => {
       let manifest = new Manifest(emptyManifest);
-      assert.equal(manifest.webAccessibleResources().length, 0);
+      assert.strictEqual(manifest.webAccessibleResources().length, 0);
     });
   });
 });

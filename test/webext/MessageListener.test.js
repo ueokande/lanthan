@@ -49,9 +49,9 @@ describe('MessageListener', () => {
         });
       });
 
-      assert.equal(messages.length, 2);
-      assert.deepEqual(messages[0], { name: 'alice', age: 12 });
-      assert.deepEqual(messages[1], { name: 'bob', age: 14 });
+      assert.strictEqual(messages.length, 2);
+      assert.deepStrictEqual(messages[0], { name: 'alice', age: 12 });
+      assert.deepStrictEqual(messages[1], { name: 'bob', age: 14 });
     });
   });
 
@@ -74,7 +74,7 @@ describe('MessageListener', () => {
         });
       });
 
-      assert(errors.length === 1);
+      assert.strictEqual(errors.length, 1);
       assert(errors[0] instanceof SyntaxError);
     });
   });
