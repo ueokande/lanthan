@@ -13,11 +13,11 @@
     "express": "^4.16.4",
     "jszip": "^3.2.1",
     "request": "^2.88.0",
-    "request-promise-native": "^1.0.7"
+    "request-promise-native": "^1.0.7",
+    "selenium-webdriver": "^4.0.0-alpha.5"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
-    "mocha": "^6.1.4",
-    "selenium-webdriver": "^4.0.0-alpha.5"
+    "mocha": "^6.1.4"
   }
 }
