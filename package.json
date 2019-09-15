@@ -4,6 +4,7 @@
   "description": "A test framework for WebExtensions",
   "scripts": {
     "lint": "eslint .",
+    "build": "tsc",
     "test": "mocha --timeout 5000 'test/**/*.test.js'"
   },
   "author": "Shin'ya Ueoka",
