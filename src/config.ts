@@ -1,8 +1,6 @@
-'use strict';
-
-const fs = require('fs');
-const os = require('os');
-const path = require('path');
+import * as fs from 'fs';
+import * as os from 'os';
+import * as path from 'path';
 
 const defaultPath = path.join(os.tmpdir(), 'lanthan-driver.json');
 
@@ -25,7 +23,7 @@ const load = (
   filepath = defaultPath,
 ) => {
   let buf = fs.readFileSync(filepath);
-  let opts = JSON.parse(buf);
+  let opts = JSON.parse(buf.toString());
   return Object.assign({}, defaultOption, opts);
 };
 
@@ -35,7 +33,7 @@ const remove = (
   fs.unlinkSync(filepath);
 };
 
-module.exports = {
+export {
   save,
   load,
   remove,

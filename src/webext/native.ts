@@ -1,21 +1,20 @@
-'use strict';
+import * as fs from 'fs';
+import * as os from 'os';
+import * as path from 'path';
+import addonManifest from '../../addon/manifest.json';
+import * as fsutil from './fsutil';
 
-const fs = require('fs');
-const os = require('os');
-const path = require('path');
-const addonManifest = require('../../addon/manifest');
-const fsutil = require('./fsutil');
 
 // ref: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_manifests#Manifest_location
 const createManifestPlatforms = {
-  linux: (name, body) => {
+  linux: (name: string, body: object) => {
     let dir = path.join(os.homedir(), '.mozilla', 'native-messaging-hosts');
     fsutil.mkdirAllSync(dir);
     let fullpath = path.join(dir, `${name}.json`);
     fs.writeFileSync(fullpath, JSON.stringify(body));
   },
 
-  darwin: (name, body) => {
+  darwin: (name: string, body: object) => {
     let dir = path.join(os.homedir(), 'Library', 'Application Support', 'Mozilla', 'NativeMessagingHosts');
     fsutil.mkdirAllSync(dir);
     let fullpath = path.join(dir, `${name}.json`);
@@ -24,12 +23,12 @@ const createManifestPlatforms = {
 };
 
 const removeManiefstPlatforms = {
-  linux: (name) => {
+  linux: (name: string) => {
     let fullpath = path.join(os.homedir(), '.mozilla', 'native-messaging-hosts', `${name}.json`);
     fs.unlinkSync(fullpath);
   },
 
-  darwin: (name) => {
+  darwin: (name: string) => {
     let fullpath = path.join(os.homedir(),
       'Library', 'Application Support', 'Mozilla',
       'NativeMessagingHosts', `${name}.json`);
@@ -68,7 +67,7 @@ const removeManifest = () => {
   throw new Error('Unsupported platform: ' + process.platform);
 };
 
-module.exports = {
+export {
   createManifest,
   removeManifest,
 };

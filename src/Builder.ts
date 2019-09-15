@@ -1,29 +1,34 @@
-'use strict';
+import * as fs from 'fs';
+import * as os from 'os';
+import * as path from 'path';
+import { Builder as WebDriverBuilder } from 'selenium-webdriver';
+import { Options as FirefoxOptions, Driver as FirefoxDriver } from 'selenium-webdriver/firefox';
 
-const fs = require('fs');
-const os = require('os');
-const path = require('path');
-const { Builder: WebDriverBuilder } = require('selenium-webdriver');
+import AddonBuilder from './addon/AddonBuilder';
+import Lanthan from './Lanthan';
+import WebExtDriver from './WebExtDriver';
 
-const AddonBuilder = require('./addon/AddonBuilder');
-const Lanthan = require('./Lanthan');
-const WebExtDriver = require('./WebExtDriver');
+interface Options extends FirefoxOptions {
+  setPreference(key: string, value: string | number | boolean): Options;
+}
+
+interface Driver extends FirefoxDriver {
+  installAddon(path: string, temporary: boolean): Promise<string>;
+}
 
 class Builder {
-  constructor(webdriverBuilder) {
-    this.spiedAddon = undefined;
-    this.webdriverBuilder = webdriverBuilder.setFirefoxOptions({
-      prefs: {
-        'devtools.chrome.enabled': true,
-        'devtools.debugger.remote-enabled': true,
-      },
-      log: {
-        level: 'info'
-      }
-    });
+  private spiedAddon: string | undefined;
+
+  private webdriverBuilder: WebDriverBuilder;
+
+  constructor(webdriverBuilder: WebDriverBuilder) {
+     let opts = (new FirefoxOptions() as Options)
+      .setPreference('devtools.chrome.enabled', true)
+      .setPreference('devtools.debugger.remote-enabled', true);
+    this.webdriverBuilder = webdriverBuilder.setFirefoxOptions(opts);
   }
 
-  static forBrowser(browser) {
+  static forBrowser(browser: string) {
     if (browser !== 'firefox') {
       throw new Error(`Browser '${browser} not supported`);
     }
@@ -32,23 +37,13 @@ class Builder {
     );
   }
 
-  setFirefoxOptions(options) {
-    this.webdriverBuilder.setFirefoxOptions(options);
-    return this;
-  }
-
-  withCapabilities(capabilities) {
-    this.webdriverBuilder.withCapabilities(capabilities);
-    return this;
-  }
-
-  spyAddon(dir) {
+  spyAddon(dir: string) {
     this.spiedAddon = dir;
     return this;
   }
 
   async build() {
-    let webdriver = this.webdriverBuilder.build();
+    let webdriver = (await this.webdriverBuilder.build()) as Driver
     let webextdriver = new WebExtDriver();
     webextdriver.setup();
 
@@ -76,4 +71,4 @@ class Builder {
   }
 }
 
-module.exports = Builder;
+export default Builder;

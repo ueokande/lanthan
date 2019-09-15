@@ -1,31 +1,28 @@
-'use strict';
+import apis from './api-metadata.json';
 
-const apis = require('./api-metadata.json');
+let methodList: string[] = [];
+let minArgsMap: { [method: string]: number } = {};
+let maxArgsMap: { [method: string]: number } = {};
 
-let methodList = [];
-let minArgsMap = {};
-let maxArgsMap = {};
-
-const methods = () => {
+const methods = (): string[] => {
   return [...methodList];
 };
 
-const minArgs = (method) => {
+const minArgs = (method: string) => {
   if (method in minArgsMap) {
     return minArgsMap[method];
   }
   throw new RangeError(`no minArgs for ${method}`);
 };
 
-const maxArgs = (method) => {
+const maxArgs = (method: string) => {
   if (method in maxArgsMap) {
     return maxArgsMap[method];
   }
   throw new RangeError(`no maxArgs for ${method}`);
 };
 
-
-const parse = (child, path) => {
+const parse = (child: any, path: string) => {
   for (let key of Object.keys(child)) {
     let value = child[key];
     if (typeof value !== 'object') {
@@ -44,7 +41,7 @@ const parse = (child, path) => {
 
 parse(apis, 'browser');
 
-module.exports = {
+export {
   methods,
   minArgs,
   maxArgs,

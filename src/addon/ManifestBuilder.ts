@@ -1,31 +1,30 @@
-'use strict';
+import * as fs from 'fs';
 
-const fs = require('fs');
-
-class ManifestBuilder {
-  constructor(data = {}) {
-    this.data = data;
+export default class ManifestBuilder {
+  constructor(
+    private data: any = {},
+  ) {
   }
 
-  static fromPath(path) {
-    let data = JSON.parse(fs.readFileSync(path));
+  static fromPath(path: string): ManifestBuilder {
+    let data = JSON.parse(fs.readFileSync(path, 'utf8'));
     return new ManifestBuilder(data);
   }
 
-  addBackgroundScript(path) {
+  addBackgroundScript(path: string): ManifestBuilder {
     this.data.background = this.data.background || {};
     this.data.background.scripts = this.data.background.scripts || [];
     this.data.background.scripts.push(path);
     return this;
   }
 
-  addPermission(permission) {
+  addPermission(permission: string): ManifestBuilder {
     this.data.permissions = this.data.permissions || [];
     this.data.permissions.push(permission);
     return this;
   }
 
-  setBrowserSpecificSettings(browser, key, value) {
+  setBrowserSpecificSettings(browser: string, key: string, value: string | number | boolean): ManifestBuilder {
     this.data.applications = this.data.applications || {};
     this.data.applications[browser] = Object.assign({},
       this.data.applications[browser],
@@ -33,13 +32,11 @@ class ManifestBuilder {
     return this;
   }
 
-  build() {
+  build(): any {
     return this.data;
   }
 
-  buildString() {
-    return JSON.stringify(this.data, 2);
+  buildString(): string {
+    return JSON.stringify(this.data);
   }
 }
-
-module.exports = ManifestBuilder;

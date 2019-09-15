@@ -1,13 +1,16 @@
-'use strict';
+import * as path from 'path';
+import request from 'request-promise-native';
 
-const path = require('path');
+import * as config from './config';
+import * as native from './webext/native';
+import * as webext from './webext/api';
 
-const config = require('./config');
-const native = require('./webext/native');
-const request = require('request-promise-native');
-const webext = require('./webext/api');
 
-const waitForSucessfully = async(fn, timeout = 3000, interval = 100) => {
+const waitForSucessfully = async(
+  fn: () => any,
+  timeout: number = 3000,
+  interval: number = 100
+) => {
   let start = Date.now();
   let loop = async() => {
     try {
@@ -24,6 +27,9 @@ const waitForSucessfully = async(fn, timeout = 3000, interval = 100) => {
 };
 
 class WebExtDriver {
+  private address: string;
+  private port: number;
+
   constructor() {
     this.address = '';
     this.port = -1;
@@ -48,7 +54,7 @@ class WebExtDriver {
     });
   }
 
-  getBrowser() {
+  getBrowser(): any {
     return webext.create(this.address, this.port);
   }
 
@@ -58,4 +64,4 @@ class WebExtDriver {
   }
 }
 
-module.exports = WebExtDriver;
+export default WebExtDriver;

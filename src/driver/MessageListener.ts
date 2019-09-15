@@ -1,17 +1,31 @@
-'use strict';
+import * as stream from 'stream';
 
-class MessageListener {
-  constructor(r) {
-    this.r = r;
+export type OnMessageListener = (message: object) => void;
+export type OnErrorListener = (error: Error) => void;
+
+export interface MessageListener {
+  onMessage(listener: OnMessageListener): void;
+
+  onError(listener: OnErrorListener): void;
+
+  listen(): void;
+}
+
+export class MessageListenerImpl {
+  private onMessageListener: OnMessageListener;
+
+  private onErrorListener: OnErrorListener;
+
+  constructor(private r: stream.Readable) {
     this.onMessageListener = () => {};
     this.onErrorListener = () => {};
   }
 
-  onMessage(listener) {
+  onMessage(listener: OnMessageListener) {
     this.onMessageListener = listener;
   }
 
-  onError(listener) {
+  onError(listener: OnErrorListener) {
     this.onErrorListener = listener;
   }
 
@@ -32,10 +46,10 @@ class MessageListener {
           }
 
           if (readingHeader) {
-            remaining = buffer.readUInt32LE();
+            remaining = buffer.readUInt32LE(0);
           } else {
             remaining = 4;
-            let message = JSON.parse(buffer);
+            let message = JSON.parse(buffer.toString());
             this.onMessageListener(message);
           }
           readingHeader = !readingHeader;
@@ -47,5 +61,3 @@ class MessageListener {
     });
   }
 }
-
-module.exports = MessageListener;

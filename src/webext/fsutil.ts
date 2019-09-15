@@ -1,9 +1,7 @@
-'use strict';
+import * as fs from 'fs';
+import * as path from 'path';
 
-const fs = require('fs');
-const path = require('path');
-
-const mkdirAllSync = (p, mode = 0o0755) => {
+const mkdirAllSync = (p: string, mode = 0o0755) => {
   let dirname = path.dirname(p);
   if (!fs.existsSync(dirname)) {
     mkdirAllSync(dirname, mode);
@@ -13,6 +11,6 @@ const mkdirAllSync = (p, mode = 0o0755) => {
   }
 };
 
-module.exports = {
+export {
   mkdirAllSync,
 };

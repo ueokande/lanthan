@@ -1,26 +1,35 @@
-'use strict';
+import bodyParser from 'body-parser';
+import express from 'express';
+import http from 'http';
+import uuidv4 from 'uuid/v4';
 
-const bodyParser = require('body-parser');
-const express = require('express');
-const metadata = require('../webext/metadata');
-const http = require('http');
-const uuidv4 = require('uuid/v4');
+import * as metadata from '../webext/metadata';
+import { MessageListener } from './MessageListener';
+import { MessageClient } from './MessageClient';
+import { Logger } from './Logger';
 
-const newRequest = (body) => {
-  let id = uuidv4();
-  return { id, body };
-};
-
-const {
+import {
   HttpError,
   NotFoundError,
   NotAcceptableError,
   BadRequestError,
-} = require('../webext/error');
+} from '../webext/error';
 
 class Server {
+  private app: express.Application;
+
+  private server: http.Server | undefined;
+
+  private pool: { [key: string]: express.Response };
+
   // eslint-disable-next-line max-statements
-  constructor(address, port, client, listener, logger) {
+  constructor(
+    private address: string,
+    private port: number,
+    private client: MessageClient,
+    private listener: MessageListener,
+    private logger: Logger,
+  ) {
     let app = express();
     app.use(bodyParser.json());
     app.get('/health', this.handleHealth.bind(this));
@@ -28,7 +37,7 @@ class Server {
     app.use(() => {
       throw new NotFoundError('not found');
     });
-    app.use((err, req, res, next) => {
+    app.use((err: Error, _req: express.Request, res: express.Response, next: express.NextFunction) => {
       if (err instanceof SyntaxError) {
         res.status(400).send({ status: 400, message: err.message });
       } else if (err instanceof HttpError) {
@@ -40,22 +49,15 @@ class Server {
       }
       next(err);
     });
-    app.use((_err, req, res) => {
+    app.use((_err, req: express.Request, res: express.Response) => {
       logger.info(
         `"${req.method} ${req.path}",`,
         `${JSON.stringify(req.body)},`,
         ` ${res.statusCode}`);
     });
-
     listener.onMessage(this.onMessage.bind(this));
 
-    this.address = address;
-    this.port = port;
     this.app = app;
-    this.server = null;
-    this.client = client;
-    this.listener = listener;
-    this.logger = logger;
     this.pool = {};
   }
 
@@ -75,10 +77,13 @@ class Server {
   }
 
   close() {
-    this.server.close();
+    if (this.server) {
+      this.server.close();
+      this.server = undefined;
+    }
   }
 
-  handleWebext(req, res) {
+  handleWebext(req: express.Request, res: express.Response) {
     if (!req.is('application/json')) {
       throw new NotAcceptableError('only application/json is acceptable');
     }
@@ -91,19 +96,22 @@ class Server {
       throw new BadRequestError('body does not an Array');
     }
 
-    let msg = newRequest({
-      method: method,
-      params: req.body,
-    });
+    let msg = {
+      id: uuidv4(),
+      body: {
+        method: method,
+        params: req.body,
+      }
+    };
     this.pool[msg.id] = res;
     this.client.sendMessage(msg);
   }
 
-  handleHealth(_req, res) {
+  handleHealth(_req: express.Request, res: express.Response) {
     res.status(200).send({ status: 200, message: 'ok' });
   }
 
-  onMessage(message) {
+  onMessage(message: any) {
     if (!(message.id in this.pool)) {
       this.logger.warn('unexpected message:', message);
       return;
@@ -134,4 +142,4 @@ class Server {
   }
 }
 
-module.exports = Server;
+export default Server;

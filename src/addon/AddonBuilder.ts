@@ -1,12 +1,10 @@
-'use strict';
+import * as fs from 'fs';
+import * as path from 'path';
+import JSZip from 'jszip';
 
-const fs = require('fs');
-const path = require('path');
+import ManifestBuilder from './ManifestBuilder';
 
-const ManifestBuilder = require('./ManifestBuilder');
-const JSZip = require('jszip');
-
-const walk = (dir, callback) => {
+const walk = (dir: string, callback: (p: string) => void) => {
   fs.readdirSync(dir).forEach((f) => {
     let dirPath = path.join(dir, f);
     if (fs.statSync(dirPath).isDirectory() && f !== 'node_modules') {
@@ -16,14 +14,17 @@ const walk = (dir, callback) => {
   });
 };
 
-class AddonBuilder {
-  constructor(baseDir) {
+export default class AddonBuilder {
+  private manifestBuilder: ManifestBuilder;
+
+  private zip: JSZip;
+
+  constructor(private baseDir: string) {
     this.manifestBuilder = ManifestBuilder.fromPath(path.join(baseDir, 'manifest.json'));
-    this.baseDir = baseDir;
     this.zip = new JSZip();
   }
 
-  addFile(name, content) {
+  addFile(name: string, content: string | Buffer): AddonBuilder {
     if (content) {
       this.zip.file(name, content);
       return this;
@@ -42,23 +43,23 @@ class AddonBuilder {
     return this;
   }
 
-  addBackgroundScript(name, content) {
+  addBackgroundScript(name: string, content: string | Buffer): AddonBuilder {
     this.manifestBuilder.addBackgroundScript(name);
     this.addFile(name, content);
     return this;
   }
 
-  addPermission(permission) {
+  addPermission(permission: string): AddonBuilder {
     this.manifestBuilder.addPermission(permission);
     return this;
   }
 
-  setBrowserSpecificSettings(browser, key, value) {
+  setBrowserSpecificSettings(browser: string, key: string, value: string): AddonBuilder {
     this.manifestBuilder.setBrowserSpecificSettings(browser, key, value);
     return this;
   }
 
-  build() {
+  build(): Promise<Buffer> {
     walk(this.baseDir, (f) => {
       let data = fs.readFileSync(f);
       this.zip.file(path.relative(this.baseDir, f), data);
@@ -71,5 +72,3 @@ class AddonBuilder {
     });
   }
 }
-
-module.exports = AddonBuilder;
