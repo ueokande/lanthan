@@ -1,0 +1,15 @@
+{
+  "manifest_version": 2,
+  "name": "spied-addon",
+  "description": "A test data for lanthan-driver with spy",
+  "version": "0.0.1",
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
+  "permissions": [
+    "storage"
+  ]
+}
+

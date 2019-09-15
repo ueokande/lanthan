@@ -17,41 +17,9 @@ describe('AddonBuilder', () => {
       assert.strictEqual(manifest.name, 'lanthan-driver');
 
       let background = await zip.file('background.js').async('string');
-      assert.strictEqual(background, `/* this is a background script */
-`);
-
-      assert.strictEqual(zip.file('additional.js'), null);
-    });
-  });
-
-  describe('#addFile', () => {
-    it('should add file with its content', async() => {
-      let builder = new AddonBuilder(path.join(__dirname, 'testdata'));
-      let name = path.join(__dirname, 'AddonBuilder.test.js');
-      builder.addFile('AddonBuilder.test.js', fs.readFileSync(name));
-      let data = await builder.build();
-
-      let zip = await JSZip.loadAsync(data);
-      let added = await zip.file('AddonBuilder.test.js').async('string');
-      assert(added.startsWith(`'use strict';`));
-    });
-
-    it('should add file with path within driver directory', async() => {
-      let builder = new AddonBuilder(path.join(__dirname, 'testdata'));
-      builder.addFile(path.join(__dirname, 'testdata', 'additional.js'));
-      let data = await builder.build();
-
-      let zip = await JSZip.loadAsync(data);
-      let added = await zip.file('additional.js').async('string');
-      assert.strictEqual(added, `/* this is an additional file */
-`);
-    });
-
-    it('should add file with content', () => {
-      let builder = new AddonBuilder(path.join(__dirname, 'testdata'));
-      assert.throws(() => {
-        builder.addFile(path.join(__dirname, 'AddonBuilder.test.js'));
-      });
+      let additional = await zip.file('additional.js').async('string');
+      assert.strictEqual(background, '/* this is a background script */\n');
+      assert.strictEqual(additional, '/* this is an additional file */\n');
     });
   });
 
@@ -84,17 +52,12 @@ describe('AddonBuilder', () => {
     });
   });
 
-  describe('#overrideProperty', () => {
-    it('should override a property', async() => {
+  describe('#setBrowserSpecificSettings', () => {
+    it('should override a browser specific settings', async() => {
       let builder = new AddonBuilder(path.join(__dirname, 'testdata'));
-      builder.overrideProperty('applications', {
-        'gecko': {
-          id: 'foobar@example.com'
-        }
-      });
-      let data = await builder.build();
+      builder.setBrowserSpecificSettings('gecko', 'id', 'foobar@example.com');
 
-      let zip = await JSZip.loadAsync(data);
+      let zip = await JSZip.loadAsync(await builder.build());
       let manifest = JSON.parse(await zip.file('manifest.json').async('string'));
       assert.deepStrictEqual(manifest.applications.gecko.id, 'foobar@example.com');
     });

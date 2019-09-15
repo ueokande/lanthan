@@ -4,7 +4,7 @@ const { Builder } = require('../../../lib');
 const assert = require('assert');
 const server = require('../server');
 
-describe('webext integration', () => {
+describe('webext api integration', () => {
   let http;
   let lanthan;
 
