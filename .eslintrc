@@ -1,13 +1,14 @@
 {
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
   "env": {
     "es6": true,
     "mocha" : true,
     "node" : true
   },
-  "parserOptions": {
-    "ecmaVersion": 2017
-  },
-  "extends": [ "eslint:all" ],
+  "extends": [
+    "plugin:@typescript-eslint/recommended"
+  ],
   "rules": {
     "array-bracket-newline": ["error", { "multiline": true }],
     "array-element-newline": "off",
@@ -65,6 +66,7 @@
     "sort-imports": "off",
     "sort-keys": "off",
     "sort-vars": "off",
-    "space-before-function-paren": ["error", "never"]
+    "space-before-function-paren": ["error", "never"],
+    "@typescript-eslint/no-explicit-any": "off"
   }
 }
