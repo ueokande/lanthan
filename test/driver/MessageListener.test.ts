@@ -1,17 +1,15 @@
-'use strict';
+import * as assert from 'assert';
+import * as os from 'os';
+import * as path from 'path';
+import * as fs from 'fs';
+import uuidv4 from 'uuid/v4';
 
-const MessageListener = require('../../lib/driver/MessageListener');
-const assert = require('assert');
-const os = require('os');
-const path = require('path');
-const fs = require('fs');
-const uuidv4 = require('uuid/v4');
+import { MessageListenerImpl } from '../../src/driver/MessageListener';
 
-describe('MessageListener', () => {
+describe('MessageListenerImpl', () => {
+  let tmpfile: string;
 
-  let tmpfile;
-
-  const uint32Bytes = (num) => {
+  const uint32Bytes = (num: number) => {
     let bytes = Buffer.alloc(4);
     bytes.writeUInt32LE(num, 0);
     return bytes;
@@ -34,9 +32,9 @@ describe('MessageListener', () => {
         uint32Bytes(data2.length), data2,
       ]));
 
-      let messages = [];
+      let messages: object[] = [];
       let buffer = fs.createReadStream(tmpfile);
-      let listener = new MessageListener(buffer);
+      let listener = new MessageListenerImpl(buffer);
       listener.listen();
       await new Promise((resolve) => {
         let count = 0;
@@ -62,9 +60,9 @@ describe('MessageListener', () => {
         uint32Bytes(data.length), data,
       ]));
 
-      let errors = [];
+      let errors: Error[] = [];
       let buffer = fs.createReadStream(tmpfile);
-      let listener = new MessageListener(buffer);
+      let listener = new MessageListenerImpl(buffer);
       listener.listen();
       listener.onMessage(() => {});
       await new Promise((resolve) => {
@@ -75,7 +73,7 @@ describe('MessageListener', () => {
       });
 
       assert.strictEqual(errors.length, 1);
-      assert(errors[0] instanceof SyntaxError);
+      assert.ok(errors[0] instanceof SyntaxError);
     });
   });
 });

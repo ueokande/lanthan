@@ -1,10 +1,9 @@
-'use strict';
+import JSZip from 'jszip';
+import * as assert from 'assert';
+import * as fs from 'fs';
+import * as path from 'path';
 
-const JSZip = require('jszip');
-const assert = require('assert');
-const fs = require('fs');
-const path = require('path');
-const AddonBuilder = require('../../lib/addon/AddonBuilder');
+import AddonBuilder from '../../src/addon/AddonBuilder';
 
 describe('AddonBuilder', () => {
   describe('#build', () => {
@@ -13,11 +12,11 @@ describe('AddonBuilder', () => {
       let data = await builder.build();
 
       let zip = await JSZip.loadAsync(data);
-      let manifest = JSON.parse(await zip.file('manifest.json').async('string'));
+      let manifest = JSON.parse(await zip.file('manifest.json').async('text'));
       assert.strictEqual(manifest.name, 'lanthan-driver');
 
-      let background = await zip.file('background.js').async('string');
-      let additional = await zip.file('additional.js').async('string');
+      let background = await zip.file('background.js').async('text');
+      let additional = await zip.file('additional.js').async('text');
       assert.strictEqual(background, '/* this is a background script */\n');
       assert.strictEqual(additional, '/* this is an additional file */\n');
     });
@@ -26,17 +25,17 @@ describe('AddonBuilder', () => {
   describe('#addBackgroundScript', () => {
     it('should adds background script', async() => {
       let builder = new AddonBuilder(path.join(__dirname, 'testdata'));
-      let name = path.join(__dirname, 'AddonBuilder.test.js');
-      builder.addBackgroundScript('AddonBuilder.test.js', fs.readFileSync(name));
+      let name = path.join(__dirname, 'out-of-testdata.js');
+      builder.addBackgroundScript('out-of-testdata.js', fs.readFileSync(name));
       let data = await builder.build();
 
       let zip = await JSZip.loadAsync(data);
-      let added = await zip.file('AddonBuilder.test.js').async('string');
-      assert(added.startsWith(`'use strict';`));
+      let added = await zip.file('out-of-testdata.js').async('text');
+      assert.strictEqual(added, '/* out of testdata */\n');
 
-      let manifest = JSON.parse(await zip.file('manifest.json').async('string'));
+      let manifest = JSON.parse(await zip.file('manifest.json').async('text'));
       assert.deepStrictEqual(manifest.background.scripts.sort(),
-        ['background.js', 'AddonBuilder.test.js'].sort());
+        ['out-of-testdata.js', 'background.js'].sort());
     });
   });
 
@@ -47,8 +46,8 @@ describe('AddonBuilder', () => {
       let data = await builder.build();
 
       let zip = await JSZip.loadAsync(data);
-      let manifest = JSON.parse(await zip.file('manifest.json').async('string'));
-      assert(manifest.permissions.includes('dns'));
+      let manifest = JSON.parse(await zip.file('manifest.json').async('text'));
+      assert.ok(manifest.permissions.includes('dns'));
     });
   });
 
@@ -58,7 +57,7 @@ describe('AddonBuilder', () => {
       builder.setBrowserSpecificSettings('gecko', 'id', 'foobar@example.com');
 
       let zip = await JSZip.loadAsync(await builder.build());
-      let manifest = JSON.parse(await zip.file('manifest.json').async('string'));
+      let manifest = JSON.parse(await zip.file('manifest.json').async('text'));
       assert.deepStrictEqual(manifest.applications.gecko.id, 'foobar@example.com');
     });
   });

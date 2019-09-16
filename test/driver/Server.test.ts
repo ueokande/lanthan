@@ -1,26 +1,38 @@
-'use strict';
+import * as assert from 'assert';
+import request from 'request-promise-native';
 
-const Server = require('../../lib/driver/Server');
-const assert = require('assert');
-const request = require('request-promise-native');
+import { MessageClient } from '../../src/driver/MessageClient'
+import { MessageListener, OnMessageListener, OnErrorListener } from '../../src/driver/MessageListener'
+import { Logger } from '../../src/driver/Logger'
+import Server from '../../src/driver/Server';
 
-class MockClient {
+type Message = any
+
+class MockClient implements MessageClient {
+  public messages: Message[];
+
+  private onMessageListener: (message: Message) => void;
+
   constructor() {
     this.messages = [];
     this.onMessageListener = () => {};
   }
 
-  sendMessage(message) {
+  sendMessage(message: Message) {
     this.messages.push(message);
     this.onMessageListener(message);
   }
 
-  onMessage(listener) {
+  onMessage(listener: (msg: Message) => void) {
     this.onMessageListener = listener;
   }
 }
 
-class MockListener {
+class MockListener implements MessageListener {
+  private onMessageListener: OnMessageListener;
+
+  private onErrorListener: OnErrorListener;
+
   constructor() {
     this.onMessageListener = () => {};
     this.onErrorListener = () => {};
@@ -29,40 +41,37 @@ class MockListener {
   listen() {
   }
 
-  onMessage(listener) {
+  onMessage(listener: OnMessageListener) {
     this.onMessageListener = listener;
   }
 
-  onError(listener) {
+  onError(listener: OnErrorListener) {
     this.onErrorListener = listener;
   }
 
-  invokeMessage(message) {
+  invokeMessage(message: Message) {
     this.onMessageListener(message);
   }
 
-  invokeError(err) {
+  invokeError(err: Error) {
     this.onErrorListener(err);
   }
 }
 
-class NullLogger {
-  info() {
-  }
+class NullLogger implements Logger {
+  info() {}
 
-  warn() {
-  }
+  warn() {}
 
-  error() {
-  }
+  error() {}
 }
 
-const port = '12345';
+const port = 12345;
 
 describe('Server', () => {
-  let client;
-  let listener;
-  let server;
+  let client: MockClient;
+  let listener: MockListener;
+  let server: Server;
 
   beforeEach(() => {
     listener = new MockListener();
@@ -98,7 +107,7 @@ describe('Server', () => {
       assert.strictEqual(resp.body[0], 'message from browser');
 
       assert.strictEqual(client.messages.length, 1);
-      assert(typeof client.messages[0].id === 'string');
+      assert.ok(typeof client.messages[0].id === 'string');
       assert.deepStrictEqual(client.messages[0].body, {
         method: 'browser.tabs.query',
         params: [1, 'b', null],

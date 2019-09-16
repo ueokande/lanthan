@@ -1,13 +1,12 @@
-'use strict';
-
-const fsutil = require('../../lib/webext/fsutil');
-const assert = require('assert');
-const fs = require('fs');
-const os = require('os');
-const path = require('path');
+import * as fsutil from '../../src/webext/fsutil';
+import * as assert from 'assert';
+import * as fs from 'fs';
+import * as os from 'os';
+import * as path from 'path';
 
 describe('fsutil', () => {
-  let tmpdir;
+  let tmpdir: string;
+
   beforeEach(() => {
     tmpdir = fs.mkdtempSync(path.join(os.tmpdir(), 'fsutil-'));
   });
@@ -18,7 +17,7 @@ describe('fsutil', () => {
       fsutil.mkdirAllSync(p, 0x755);
 
       let stat = fs.lstatSync(p);
-      assert(stat.isDirectory());
+      assert.ok(stat.isDirectory());
     });
 
     it('should not throws an error if directory already exists', () => {

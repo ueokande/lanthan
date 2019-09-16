@@ -1,16 +1,16 @@
-'use strict';
+import * as assert from 'assert';
+import * as server from '../server';
+import * as http from 'http';
 
-const { Builder } = require('../../../lib');
-const assert = require('assert');
-const server = require('../server');
+import { Builder, Lanthan } from '../../../src';
 
 describe('webext api integration', () => {
-  let http;
-  let lanthan;
+  let httpServer: http.Server;
+  let lanthan: Lanthan;
 
   before(async() => {
-    let sv = server.newApp();
-    http = sv.listen(10101, '127.0.0.1');
+    let app = server.newApp();
+    httpServer = app.listen(10101, '127.0.0.1');
 
     lanthan = await Builder.forBrowser('firefox').build();
   });
@@ -19,7 +19,7 @@ describe('webext api integration', () => {
     if (lanthan) {
       await lanthan.quit();
     }
-    http.close();
+    httpServer.close();
   });
 
   it('should invoke WebExtensions APIs', async() => {

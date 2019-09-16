@@ -1,12 +1,10 @@
-'use strict';
-
-const metadata = require('../../lib/webext/metadata');
-const assert = require('assert');
+import * as metadata from '../../src/webext/metadata';
+import * as assert from 'assert';
 
 describe('metadata', () => {
   describe('#methods', () => {
     it('should contains "browser.tabs.update"', () => {
-      assert(metadata.methods().includes('browser.tabs.update'));
+      assert.ok(metadata.methods().includes('browser.tabs.update'));
     });
   });
 
@@ -17,7 +15,7 @@ describe('metadata', () => {
     });
 
     it('should throw RangeError if the method does not exits', () => {
-      assert(() => metadata.minArgs('browser.tabs.harakiri'), RangeError);
+      assert.throws(() => metadata.minArgs('browser.tabs.harakiri'), RangeError);
     });
   });
 
@@ -28,7 +26,7 @@ describe('metadata', () => {
     });
 
     it('should throw RangeError if the method does not exits', () => {
-      assert(() => metadata.maxArgs('browser.tabs.harakiri'), RangeError);
+      assert.throws(() => metadata.maxArgs('browser.tabs.harakiri'), RangeError);
     });
   });
 });

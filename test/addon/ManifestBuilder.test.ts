@@ -1,15 +1,13 @@
-'use strict';
+import * as path from 'path';
+import * as fs from 'fs';
+import * as os from 'os';
+import * as assert from 'assert';
 
-const path = require('path');
-const fs = require('fs');
-const os = require('os');
-const assert = require('assert');
-
-const ManifestBuilder = require('../../lib/addon/ManifestBuilder');
+import ManifestBuilder from '../../src/addon/ManifestBuilder';
 
 describe('ManifestBuilder', () => {
   describe('#fromPath', () => {
-    let manifestPath = undefined;
+    let manifestPath: string | undefined;
 
     afterEach(() => {
       if (manifestPath) {

@@ -1,15 +1,15 @@
-'use strict';
+import * as assert from 'assert';
+import * as path from 'path';
 
-const assert = require('assert');
-const path = require('path');
-
-const { Builder } = require('../../../lib');
+import { Builder, Lanthan } from '../../../src';
 
 describe('webext spy integration', () => {
-  let lanthan;
+  let lanthan: Lanthan | undefined;
 
   after(async() => {
-    await lanthan.quit();
+    if (lanthan) {
+      await lanthan.quit();
+    }
   });
 
   it('should loads lanthan with spied addon', async() => {
