@@ -2,11 +2,11 @@
 
 'use strict';
 
-const config = require('../dist/config');
-const { MessageClientImpl } = require('../dist/driver/MessageClient');
-const { MessageListenerImpl } = require('../dist/driver/MessageListener');
-const { FileLogger } = require('../dist/driver/Logger');
-const Server = require('../dist/driver/Server').default;
+const config = require('../lib/config');
+const { MessageClientImpl } = require('../lib/driver/MessageClient');
+const { MessageListenerImpl } = require('../lib/driver/MessageListener');
+const { FileLogger } = require('../lib/driver/Logger');
+const Server = require('../lib/driver/Server').default;
 
 const main = () => {
   let conf = config.load();
