@@ -2,7 +2,7 @@ import * as metadata from './metadata';
 import request from 'request-promise-native';
 import errors from 'request-promise-native/errors';
 
-const create = (address: string, port: number) => {
+const create = (address: string, port: number): any => {
   let root: any = {};
   let methods = metadata.methods();
   for (let method of methods) {
@@ -12,7 +12,7 @@ const create = (address: string, port: number) => {
       head[name] = head[name] || {};
       head = head[name];
     }
-    head[names[names.length - 1]] = async(...args: any[]) => {
+    head[names[names.length - 1]] = async(...args: any[]): Promise<any> => {
       try {
         let response = await request({
           url: `http://${address}:${port}/${method}`,

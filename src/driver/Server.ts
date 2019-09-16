@@ -61,7 +61,7 @@ class Server {
     this.pool = {};
   }
 
-  listen() {
+  listen(): void {
     this.listener.listen();
     this.server = http.createServer(this.app);
     this.server.on('listening', () => {
@@ -76,14 +76,14 @@ class Server {
     this.server.listen(this.port, this.address);
   }
 
-  close() {
+  close(): void {
     if (this.server) {
       this.server.close();
       this.server = undefined;
     }
   }
 
-  handleWebext(req: express.Request, res: express.Response) {
+  private handleWebext(req: express.Request, res: express.Response): void {
     if (!req.is('application/json')) {
       throw new NotAcceptableError('only application/json is acceptable');
     }
@@ -107,11 +107,11 @@ class Server {
     this.client.sendMessage(msg);
   }
 
-  handleHealth(_req: express.Request, res: express.Response) {
+  private handleHealth(_req: express.Request, res: express.Response): void {
     res.status(200).send({ status: 200, message: 'ok' });
   }
 
-  onMessage(message: any) {
+  private onMessage(message: any): void {
     if (!(message.id in this.pool)) {
       this.logger.warn('unexpected message:', message);
       return;

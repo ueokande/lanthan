@@ -17,19 +17,19 @@ export class MessageListenerImpl {
   private onErrorListener: OnErrorListener;
 
   constructor(private r: stream.Readable) {
-    this.onMessageListener = () => {};
-    this.onErrorListener = () => {};
+    this.onMessageListener = (): void => {};
+    this.onErrorListener = (): void => {};
   }
 
-  onMessage(listener: OnMessageListener) {
+  onMessage(listener: OnMessageListener): void {
     this.onMessageListener = listener;
   }
 
-  onError(listener: OnErrorListener) {
+  onError(listener: OnErrorListener): void {
     this.onErrorListener = listener;
   }
 
-  listen() {
+  listen(): void {
     let buffer = Buffer.alloc(0);
     let remaining = 4;
     let readingHeader = true;

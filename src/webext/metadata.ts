@@ -8,21 +8,21 @@ const methods = (): string[] => {
   return [...methodList];
 };
 
-const minArgs = (method: string) => {
+const minArgs = (method: string): number => {
   if (method in minArgsMap) {
     return minArgsMap[method];
   }
   throw new RangeError(`no minArgs for ${method}`);
 };
 
-const maxArgs = (method: string) => {
+const maxArgs = (method: string): number => {
   if (method in maxArgsMap) {
     return maxArgsMap[method];
   }
   throw new RangeError(`no maxArgs for ${method}`);
 };
 
-const parse = (child: any, path: string) => {
+const parse = (child: any, path: string): void => {
   for (let key of Object.keys(child)) {
     let value = child[key];
     if (typeof value !== 'object') {

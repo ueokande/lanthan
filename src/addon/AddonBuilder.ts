@@ -4,7 +4,7 @@ import JSZip from 'jszip';
 
 import ManifestBuilder from './ManifestBuilder';
 
-const walk = (dir: string, callback: (p: string) => void) => {
+const walk = (dir: string, callback: (p: string) => void): void => {
   fs.readdirSync(dir).forEach((f) => {
     let dirPath = path.join(dir, f);
     if (fs.statSync(dirPath).isDirectory() && f !== 'node_modules') {

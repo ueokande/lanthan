@@ -16,7 +16,7 @@ export default class Lanthan {
     return this.webdriver;
   }
 
-  async quit() {
+  async quit(): Promise<void> {
     await this.webextdriver.quit();
     await this.webdriver.quit();
   }

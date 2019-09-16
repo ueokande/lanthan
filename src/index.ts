@@ -4,4 +4,4 @@ import Lanthan from './Lanthan';
 export {
   Builder,
   Lanthan,
-}
+};

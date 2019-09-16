@@ -22,13 +22,13 @@ class Builder {
   private webdriverBuilder: WebDriverBuilder;
 
   constructor(webdriverBuilder: WebDriverBuilder) {
-     let opts = (new FirefoxOptions() as Options)
+    let opts: Options = (new FirefoxOptions() as Options)
       .setPreference('devtools.chrome.enabled', true)
       .setPreference('devtools.debugger.remote-enabled', true);
     this.webdriverBuilder = webdriverBuilder.setFirefoxOptions(opts);
   }
 
-  static forBrowser(browser: string) {
+  static forBrowser(browser: string): Builder {
     if (browser !== 'firefox') {
       throw new Error(`Browser '${browser} not supported`);
     }
@@ -37,13 +37,13 @@ class Builder {
     );
   }
 
-  spyAddon(dir: string) {
+  spyAddon(dir: string): Builder {
     this.spiedAddon = dir;
     return this;
   }
 
-  async build() {
-    let webdriver = (await this.webdriverBuilder.build()) as Driver
+  async build(): Promise<Lanthan> {
+    let webdriver = (await this.webdriverBuilder.build()) as Driver;
     let webextdriver = new WebExtDriver();
     webextdriver.setup();
 
@@ -57,7 +57,7 @@ class Builder {
     return new Lanthan(webdriver, webextdriver);
   }
 
-  addonBuilder() {
+  private addonBuilder(): AddonBuilder {
     if (this.spiedAddon) {
       let driverPath = path.join(__dirname, '..', 'addon', 'background.js');
       let driverContent = fs.readFileSync(driverPath);

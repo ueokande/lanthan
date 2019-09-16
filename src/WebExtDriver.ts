@@ -7,19 +7,19 @@ import * as webext from './webext/api';
 
 
 const waitForSucessfully = async(
-  fn: () => any,
-  timeout: number = 3000,
-  interval: number = 100
-) => {
+  fn: () => void,
+  timeout = 3000,
+  interval = 100
+): Promise<void> => {
   let start = Date.now();
-  let loop = async() => {
+  let loop = async(): Promise<void> => {
     try {
       await fn();
     } catch (err) {
       if (Date.now() - start > timeout) {
         throw err;
       }
-      await new Promise(resolve => setTimeout(resolve, interval));
+      await new Promise((resolve): void => { setTimeout(resolve, interval) });
       await loop();
     }
   };
@@ -28,6 +28,7 @@ const waitForSucessfully = async(
 
 class WebExtDriver {
   private address: string;
+
   private port: number;
 
   constructor() {
@@ -35,7 +36,7 @@ class WebExtDriver {
     this.port = -1;
   }
 
-  setup() {
+  setup(): void {
     let settings = config.save({
       logFile: path.join(process.cwd(), 'lanthan-driver.log'),
     });
@@ -44,7 +45,7 @@ class WebExtDriver {
     this.port = settings.port;
   }
 
-  wait() {
+  wait(): Promise<void> {
     return waitForSucessfully(() => {
       return request({
         url: `http://127.0.0.1:${this.port}/health`,
@@ -58,7 +59,7 @@ class WebExtDriver {
     return webext.create(this.address, this.port);
   }
 
-  quit() {
+  quit(): void {
     config.remove();
     native.removeManifest();
   }
