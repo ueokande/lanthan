@@ -45,7 +45,7 @@ const NAME = 'lanthan_driver';
 const MANIFEST_BODY = {
   'name': NAME,
   'description': NAME,
-  'path': path.join(__dirname, '..', '..', 'bin', 'lanthan-driver.js'),
+  'path': path.join(__dirname, '..', '..', 'bin', 'lanthan-driver'),
   'type': 'stdio',
   'allowed_extensions': [getAddonManifestGeckoID()],
 };
