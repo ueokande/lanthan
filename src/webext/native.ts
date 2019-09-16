@@ -1,9 +1,14 @@
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
-import addonManifest from '../../addon/manifest.json';
 import * as fsutil from './fsutil';
 
+const getAddonManifestGeckoID = () => {
+  let p = path.join(__dirname, '..', '..', 'addon', 'manifest.json')
+  let data = fs.readFileSync(p, 'utf8');
+  let manifest = JSON.parse(data);
+  return manifest.applications.gecko.id;
+};
 
 // ref: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_manifests#Manifest_location
 const createManifestPlatforms = {
@@ -42,7 +47,7 @@ const MANIFEST_BODY = {
   'description': NAME,
   'path': path.join(__dirname, '..', '..', 'bin', 'lanthan-driver.js'),
   'type': 'stdio',
-  'allowed_extensions': [addonManifest.applications.gecko.id],
+  'allowed_extensions': [getAddonManifestGeckoID()],
 };
 
 const createManifest = () => {
