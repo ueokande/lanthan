@@ -37,6 +37,11 @@ class Builder {
     );
   }
 
+  setOptions(caps: FirefoxOptions): Builder {
+    this.webdriverBuilder.setFirefoxOptions(caps)
+    return this
+  }
+
   spyAddon(dir: string): Builder {
     this.spiedAddon = dir;
     return this;
