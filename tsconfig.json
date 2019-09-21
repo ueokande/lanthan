@@ -2,13 +2,12 @@
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
-    "allowJs": true,
-    "checkJs": true,
     "sourceMap": true,
     "outDir": "./lib",
     "rootDir": "./src",
     "removeComments": false,
     "importHelpers": false,
+    "declaration": true,
 
     "strict": true,
     "noImplicitAny": true,
