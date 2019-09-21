@@ -96,6 +96,8 @@ jobs:
       - run:
           name: "Prepare npm account"
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >~/.npmrc
+      - npm_install
+      - run: npm run build
       - run: npm publish
 
 workflows:
