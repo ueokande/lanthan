@@ -1,7 +1,5 @@
-'use strict';
-
-const express = require('express');
-const path = require('path');
+import express from 'express';
+import * as path from 'path';
 
 const newApp = () => {
   let app = express();
@@ -9,6 +7,6 @@ const newApp = () => {
   return app;
 };
 
-module.exports = {
+export {
   newApp,
 };
