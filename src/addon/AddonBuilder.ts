@@ -7,7 +7,10 @@ import ManifestBuilder from './ManifestBuilder';
 const walk = (dir: string, callback: (p: string) => void): void => {
   fs.readdirSync(dir).forEach((f) => {
     let dirPath = path.join(dir, f);
-    if (fs.statSync(dirPath).isDirectory() && f !== 'node_modules') {
+    if (fs.statSync(dirPath).isDirectory()) {
+      if (f === 'node_modules') {
+        return
+      }
       return walk(dirPath, callback);
     }
     callback(path.join(dir, f));
