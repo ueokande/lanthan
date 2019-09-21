@@ -11,6 +11,10 @@
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "files": [
+    "bin",
+    "lib"
+  ],
   "dependencies": {
     "express": "^4.16.4",
     "jszip": "^3.2.1",
