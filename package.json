@@ -13,7 +13,8 @@
   "types": "lib/index.d.ts",
   "files": [
     "bin",
-    "lib"
+    "lib",
+    "addon"
   ],
   "dependencies": {
     "express": "^4.17.1",
