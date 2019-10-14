@@ -1,0 +1,13 @@
+{
+  "name": "examples",
+  "version": "0.0.2",
+  "description": "Lanthan example set",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Shin'ya UEOKA",
+  "license": "MIT",
+  "devDependencies": {
+    "lanthan": "0.0.2"
+  }
+}
