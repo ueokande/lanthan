@@ -49,14 +49,6 @@ commands:
 
   build:
     steps:
-      - run:
-          name: Install geckodriver
-          command: |
-            URL='https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz'
-            curl -sSLf "$URL" | tar zxv -C /tmp
-            /tmp/geckodriver
-          background: true
-
       - checkout
       - npm_install
       - run: npm run lint
