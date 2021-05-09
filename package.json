@@ -1,6 +1,6 @@
 {
   "name": "lanthan",
-  "version": "0.0.2",
+  "version": "0.0.0-test",
   "description": "A test framework for WebExtensions",
   "scripts": {
     "lint": "eslint --ext .ts .",
