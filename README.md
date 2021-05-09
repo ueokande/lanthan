@@ -13,6 +13,12 @@ Install lanthan via [npm][] as the following:
 $ npm install -D lanthan
 ```
 
+Install lanthan via [yarn][] as the following:
+
+```shell
+$ npm add -D lanthan
+```
+
 or add a package on the `"devDependencies"` field of your `package.json`:
 
 ```json
@@ -149,6 +155,7 @@ assert.strictEqual(count['https://example.net'], undefined);
 
 [selenium-webdriver]: https://github.com/SeleniumHQ/selenium
 [npm]: https://www.npmjs.com/package/lanthan
+[yarn]: https://yarnpkg.com/
 [selenium-project-document]: https://www.seleniumhq.org/docs/
 [selenium-webdriver-javascript-document]: https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/
 
