@@ -46,3 +46,29 @@ jobs:
         node 02_webext_api.js
         node 03_webdriver_api.js
         node 04_spy_addon.js
+
+  deploy:
+    needs: [build]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+    - uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-14
+
+    - run: npm ci
+    - run: npm run build
+
+    - name: "Prepare npm account"
+      env:
+        NPM_TOKEN: "${{ secrets.NPM_TOKEN }}"
+      run: |
+        echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >~/.npmrc
+    - run: npm publish
