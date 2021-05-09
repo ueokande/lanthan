@@ -1,0 +1,42 @@
+name: Build
+
+on:
+  push:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        node-version: ["12", "14", "16"]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+    - uses: ueokande/setup-firefox@latest
+      with:
+        firefox-version: 78.3.0esr
+    - uses: ueokande/setup-geckodriver@latest
+      with:
+        geckodriver-version: 0.28.0
+    - uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-${{ matrix.node-version }}
+
+    - uses: actions/checkout@v2
+    - run: npm ci
+    - run: npm run lint
+    - run: npm run build
+    - run: npm test
+    - name: Test examples
+      working-directory: examples
+      run: |
+        npm ci
+
+        node 01_setup_teardown.js
+        node 02_webext_api.js
+        node 03_webdriver_api.js
+        node 04_spy_addon.js
