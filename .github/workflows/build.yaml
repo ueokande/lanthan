@@ -30,12 +30,18 @@ jobs:
     - run: npm ci
     - run: npm run lint
     - run: npm run build
+    - run: Xvfb -ac :99 -screen 0 1280x1024x24 &
     - run: npm test
-    - name: Test examples
+      env:
+        DISPLAY: :99
+    - name: Run examples
       working-directory: examples
+      env:
+        DISPLAY: :99
       run: |
         npm ci
 
+        set -x
         node 01_setup_teardown.js
         node 02_webext_api.js
         node 03_webdriver_api.js
