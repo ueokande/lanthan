@@ -8,7 +8,7 @@ const walk = (dir: string, callback: (p: string) => void): void => {
   fs.readdirSync(dir).forEach((f) => {
     let dirPath = path.join(dir, f);
     if (fs.statSync(dirPath).isDirectory()) {
-      if (f === 'node_modules') {
+      if (f === 'node_modules' || f === '.git') {
         return
       }
       return walk(dirPath, callback);
