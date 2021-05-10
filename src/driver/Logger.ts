@@ -25,7 +25,7 @@ export class FileLogger {
   }
 
   private append(level: string, ...message: any[]): void {
-    let line = `${new Date().toISOString()} [${level}] ${message.join(' ')}\n`;
+    const line = `${new Date().toISOString()} [${level}] ${message.join(' ')}\n`;
     fs.appendFileSync(this.path, line);
   }
 }

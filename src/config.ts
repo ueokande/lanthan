@@ -20,7 +20,7 @@ const save = (
   opts = {},
   filepath = defaultPath,
 ): Settings => {
-  let settings = Object.assign({}, defaultSettings, opts);
+  const settings = Object.assign({}, defaultSettings, opts);
   fs.writeFileSync(filepath, JSON.stringify(settings));
   return settings;
 };
@@ -28,8 +28,8 @@ const save = (
 const load = (
   filepath = defaultPath,
 ): Settings => {
-  let buf = fs.readFileSync(filepath);
-  let opts = JSON.parse(buf.toString());
+  const buf = fs.readFileSync(filepath);
+  const opts = JSON.parse(buf.toString());
   return Object.assign({}, defaultSettings, opts);
 };
 

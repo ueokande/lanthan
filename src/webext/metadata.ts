@@ -1,8 +1,8 @@
 import apis from './api-metadata.json';
 
-let methodList: string[] = [];
-let minArgsMap: { [method: string]: number } = {};
-let maxArgsMap: { [method: string]: number } = {};
+const methodList: string[] = [];
+const minArgsMap: { [method: string]: number } = {};
+const maxArgsMap: { [method: string]: number } = {};
 
 const methods = (): string[] => {
   return [...methodList];
@@ -23,12 +23,12 @@ const maxArgs = (method: string): number => {
 };
 
 const parse = (child: any, path: string): void => {
-  for (let key of Object.keys(child)) {
-    let value = child[key];
+  for (const key of Object.keys(child)) {
+    const value = child[key];
     if (typeof value !== 'object') {
       throw new SyntaxError('invalid api-metadata.json');
     }
-    let path2 = path + '.' + key;
+    const path2 = path + '.' + key;
     if ('minArgs' in value && 'maxArgs' in value) {
       methodList.push(path2);
       minArgsMap[path2] = value.minArgs;

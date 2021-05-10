@@ -49,7 +49,7 @@ export class MessageListenerImpl {
             remaining = buffer.readUInt32LE(0);
           } else {
             remaining = 4;
-            let message = JSON.parse(buffer.toString());
+            const message = JSON.parse(buffer.toString());
             this.onMessageListener(message);
           }
           readingHeader = !readingHeader;

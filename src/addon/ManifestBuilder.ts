@@ -7,7 +7,7 @@ export default class ManifestBuilder {
   }
 
   static fromPath(path: string): ManifestBuilder {
-    let data = JSON.parse(fs.readFileSync(path, 'utf8'));
+    const data = JSON.parse(fs.readFileSync(path, 'utf8'));
     return new ManifestBuilder(data);
   }
 

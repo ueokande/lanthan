@@ -22,7 +22,7 @@ class Builder {
   private webdriverBuilder: WebDriverBuilder;
 
   constructor(webdriverBuilder: WebDriverBuilder) {
-    let opts: Options = (new FirefoxOptions() as Options)
+    const opts: Options = (new FirefoxOptions() as Options)
       .setPreference('devtools.chrome.enabled', true)
       .setPreference('devtools.debugger.remote-enabled', true);
     this.webdriverBuilder = webdriverBuilder.setFirefoxOptions(opts);
@@ -48,12 +48,12 @@ class Builder {
   }
 
   async build(): Promise<Lanthan> {
-    let webdriver = (await this.webdriverBuilder.build()) as Driver;
-    let webextdriver = new WebExtDriver();
+    const webdriver = (await this.webdriverBuilder.build()) as Driver;
+    const webextdriver = new WebExtDriver();
     webextdriver.setup();
 
-    let addon = await this.addonBuilder().build();
-    let addonPath = path.join(os.tmpdir(), 'lanthan-driver.zip');
+    const addon = await this.addonBuilder().build();
+    const addonPath = path.join(os.tmpdir(), 'lanthan-driver.zip');
     fs.writeFileSync(addonPath, addon);
     await webdriver.installAddon(addonPath, true);
     fs.unlinkSync(addonPath);
@@ -64,14 +64,14 @@ class Builder {
 
   private addonBuilder(): AddonBuilder {
     if (this.spiedAddon) {
-      let driverPath = path.join(__dirname, '..', 'addon', 'background.js');
-      let driverContent = fs.readFileSync(driverPath);
+      const driverPath = path.join(__dirname, '..', 'addon', 'background.js');
+      const driverContent = fs.readFileSync(driverPath);
       return new AddonBuilder(this.spiedAddon)
         .addPermission('nativeMessaging')
         .setBrowserSpecificSettings('gecko', 'id', 'lanthan-driver@i-beam.org')
         .addBackgroundScript('lanthan-driver.js', driverContent);
     }
-    let baseDir = path.join(__dirname, '..', 'addon');
+    const baseDir = path.join(__dirname, '..', 'addon');
     return new AddonBuilder(baseDir);
   }
 }

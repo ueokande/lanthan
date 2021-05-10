@@ -9,8 +9,8 @@ export class MessageClientImpl {
   }
 
   sendMessage(message: any): void {
-    let dataBytes = Buffer.from(JSON.stringify(message));
-    let lenBytes = Buffer.alloc(4);
+    const dataBytes = Buffer.from(JSON.stringify(message));
+    const lenBytes = Buffer.alloc(4);
     lenBytes.writeUInt32LE(dataBytes.length, 0);
 
     this.w.write(lenBytes);
