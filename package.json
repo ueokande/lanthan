@@ -20,7 +20,7 @@
     "express": "^4.17.1",
     "jszip": "^3.2.2",
     "request": "^2.88.0",
-    "request-promise-native": "^1.0.7",
+    "request-promise-native": "^1.0.9",
     "selenium-webdriver": "^4.0.0-alpha.5"
   },
   "devDependencies": {
