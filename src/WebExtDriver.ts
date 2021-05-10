@@ -11,8 +11,8 @@ const waitForSucessfully = async(
   timeout = 3000,
   interval = 100
 ): Promise<void> => {
-  let start = Date.now();
-  let loop = async(): Promise<void> => {
+  const start = Date.now();
+  const loop = async(): Promise<void> => {
     try {
       await fn();
     } catch (err) {
@@ -37,7 +37,7 @@ class WebExtDriver {
   }
 
   setup(): void {
-    let settings = config.save({
+    const settings = config.save({
       logFile: path.join(process.cwd(), 'lanthan-driver.log'),
     });
     native.createManifest();

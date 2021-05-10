@@ -6,7 +6,7 @@ import ManifestBuilder from './ManifestBuilder';
 
 const walk = (dir: string, callback: (p: string) => void): void => {
   fs.readdirSync(dir).forEach((f) => {
-    let dirPath = path.join(dir, f);
+    const dirPath = path.join(dir, f);
     if (fs.statSync(dirPath).isDirectory()) {
       if (f === 'node_modules' || f === '.git') {
         return
@@ -33,14 +33,14 @@ export default class AddonBuilder {
       return this;
     }
 
-    let realpath = path.resolve(name);
-    let baseDir = path.resolve(this.baseDir);
+    const realpath = path.resolve(name);
+    const baseDir = path.resolve(this.baseDir);
     if (!realpath.startsWith(baseDir)) {
       throw new Error(`file ${name} is out of directory of the addon`);
     }
 
-    let basename = path.relative(baseDir, realpath);
-    let data = fs.readFileSync(realpath);
+    const basename = path.relative(baseDir, realpath);
+    const data = fs.readFileSync(realpath);
     this.zip.file(basename, data);
 
     return this;
@@ -64,7 +64,7 @@ export default class AddonBuilder {
 
   build(): Promise<Buffer> {
     walk(this.baseDir, (f) => {
-      let data = fs.readFileSync(f);
+      const data = fs.readFileSync(f);
       this.zip.file(path.relative(this.baseDir, f), data);
     });
     this.zip.file('manifest.json', this.manifestBuilder.buildString());

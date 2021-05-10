@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 const mkdirAllSync = (p: string, mode = 0o0755): void => {
-  let dirname = path.dirname(p);
+  const dirname = path.dirname(p);
   if (!fs.existsSync(dirname)) {
     mkdirAllSync(dirname, mode);
   }

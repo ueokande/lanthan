@@ -4,37 +4,37 @@ import * as path from 'path';
 import * as fsutil from './fsutil';
 
 const getAddonManifestGeckoID = (): string => {
-  let p = path.join(__dirname, '..', '..', 'addon', 'manifest.json');
-  let data = fs.readFileSync(p, 'utf8');
-  let manifest = JSON.parse(data);
+  const p = path.join(__dirname, '..', '..', 'addon', 'manifest.json');
+  const data = fs.readFileSync(p, 'utf8');
+  const manifest = JSON.parse(data);
   return manifest.applications.gecko.id;
 };
 
 // ref: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_manifests#Manifest_location
 const createManifestPlatforms = {
   linux: (name: string, body: object): void => {
-    let dir = path.join(os.homedir(), '.mozilla', 'native-messaging-hosts');
+    const dir = path.join(os.homedir(), '.mozilla', 'native-messaging-hosts');
     fsutil.mkdirAllSync(dir);
-    let fullpath = path.join(dir, `${name}.json`);
+    const fullpath = path.join(dir, `${name}.json`);
     fs.writeFileSync(fullpath, JSON.stringify(body));
   },
 
   darwin: (name: string, body: object): void => {
-    let dir = path.join(os.homedir(), 'Library', 'Application Support', 'Mozilla', 'NativeMessagingHosts');
+    const dir = path.join(os.homedir(), 'Library', 'Application Support', 'Mozilla', 'NativeMessagingHosts');
     fsutil.mkdirAllSync(dir);
-    let fullpath = path.join(dir, `${name}.json`);
+    const fullpath = path.join(dir, `${name}.json`);
     fs.writeFileSync(fullpath, JSON.stringify(body));
   },
 };
 
 const removeManiefstPlatforms = {
   linux: (name: string): void => {
-    let fullpath = path.join(os.homedir(), '.mozilla', 'native-messaging-hosts', `${name}.json`);
+    const fullpath = path.join(os.homedir(), '.mozilla', 'native-messaging-hosts', `${name}.json`);
     fs.unlinkSync(fullpath);
   },
 
   darwin: (name: string): void => {
-    let fullpath = path.join(os.homedir(),
+    const fullpath = path.join(os.homedir(),
       'Library', 'Application Support', 'Mozilla',
       'NativeMessagingHosts', `${name}.json`);
     fs.unlinkSync(fullpath);
@@ -51,7 +51,7 @@ const MANIFEST_BODY = {
 };
 
 const createManifest = (): void => {
-  let platform = process.platform;
+  const platform = process.platform;
   switch (platform) {
   case 'linux':
   case 'darwin':
@@ -62,7 +62,7 @@ const createManifest = (): void => {
 };
 
 const removeManifest = (): void => {
-  let platform = process.platform;
+  const platform = process.platform;
   switch (platform) {
   case 'linux':
   case 'darwin':

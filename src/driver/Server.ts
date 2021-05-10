@@ -30,7 +30,7 @@ class Server {
     private listener: MessageListener,
     private logger: Logger,
   ) {
-    let app = express();
+    const app = express();
     app.use(bodyParser.json());
     app.get('/health', this.handleHealth.bind(this));
     app.put('/*', this.handleWebext.bind(this));
@@ -88,7 +88,7 @@ class Server {
       throw new NotAcceptableError('only application/json is acceptable');
     }
 
-    let method = req.path.slice(1);
+    const method = req.path.slice(1);
     if (!metadata.methods().includes(method)) {
       throw new NotFoundError(`method '${method}' does not exits`);
     }
@@ -96,7 +96,7 @@ class Server {
       throw new BadRequestError('body does not an Array');
     }
 
-    let msg = {
+    const msg = {
       id: uuidv4(),
       body: {
         method: method,
@@ -116,7 +116,7 @@ class Server {
       this.logger.warn('unexpected message:', message);
       return;
     }
-    let httpResponse = this.pool[message.id];
+    const httpResponse = this.pool[message.id];
 
     delete this.pool[message.id];
 
