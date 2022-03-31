@@ -18,7 +18,7 @@
   ],
   "dependencies": {
     "express": "^4.17.1",
-    "jszip": "^3.2.2",
+    "jszip": "^3.8.0",
     "request": "^2.88.2",
     "request-promise-native": "^1.0.9",
     "selenium-webdriver": "^4.0.0-beta.3"
