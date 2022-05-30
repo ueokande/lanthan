@@ -21,7 +21,7 @@
     "jszip": "^3.2.2",
     "request": "^2.88.2",
     "request-promise-native": "^1.0.9",
-    "selenium-webdriver": "^4.0.0-beta.3"
+    "selenium-webdriver": "^4.2.0"
   },
   "devDependencies": {
     "@types/body-parser": "^1.19.0",
@@ -30,7 +30,7 @@
     "@types/mocha": "^8.2.2",
     "@types/node": "^12.7.5",
     "@types/request-promise-native": "^1.0.17",
-    "@types/selenium-webdriver": "^4.0.12",
+    "@types/selenium-webdriver": "^4.1.1",
     "@types/uuid": "^3.4.5",
     "@typescript-eslint/eslint-plugin": "^2.34.0",
     "@typescript-eslint/parser": "^2.34.0",
