@@ -12,11 +12,11 @@ describe('AddonBuilder', () => {
       let data = await builder.build();
 
       let zip = await JSZip.loadAsync(data);
-      let manifest = JSON.parse(await zip.file('manifest.json').async('text'));
+      let manifest = JSON.parse(await zip.file('manifest.json')!.async('text'));
       assert.strictEqual(manifest.name, 'lanthan-driver');
 
-      let background = await zip.file('background.js').async('text');
-      let additional = await zip.file('additional.js').async('text');
+      let background = await zip.file('background.js')!.async('text');
+      let additional = await zip.file('additional.js')!.async('text');
       assert.strictEqual(background, '/* this is a background script */\n');
       assert.strictEqual(additional, '/* this is an additional file */\n');
     });
@@ -30,10 +30,10 @@ describe('AddonBuilder', () => {
       let data = await builder.build();
 
       let zip = await JSZip.loadAsync(data);
-      let added = await zip.file('out-of-testdata.js').async('text');
+      let added = await zip.file('out-of-testdata.js')!.async('text');
       assert.strictEqual(added, '/* out of testdata */\n');
 
-      let manifest = JSON.parse(await zip.file('manifest.json').async('text'));
+      let manifest = JSON.parse(await zip.file('manifest.json')!.async('text'));
       assert.deepStrictEqual(manifest.background.scripts.sort(),
         ['out-of-testdata.js', 'background.js'].sort());
     });
@@ -46,7 +46,7 @@ describe('AddonBuilder', () => {
       let data = await builder.build();
 
       let zip = await JSZip.loadAsync(data);
-      let manifest = JSON.parse(await zip.file('manifest.json').async('text'));
+      let manifest = JSON.parse(await zip.file('manifest.json')!.async('text'));
       assert.ok(manifest.permissions.includes('dns'));
     });
   });
@@ -57,7 +57,7 @@ describe('AddonBuilder', () => {
       builder.setBrowserSpecificSettings('gecko', 'id', 'foobar@example.com');
 
       let zip = await JSZip.loadAsync(await builder.build());
-      let manifest = JSON.parse(await zip.file('manifest.json').async('text'));
+      let manifest = JSON.parse(await zip.file('manifest.json')!.async('text'));
       assert.deepStrictEqual(manifest.applications.gecko.id, 'foobar@example.com');
     });
   });
