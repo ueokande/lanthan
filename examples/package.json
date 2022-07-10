@@ -8,6 +8,6 @@
   "author": "Shin'ya UEOKA",
   "license": "MIT",
   "devDependencies": {
-    "lanthan": "0.0.2"
+    "lanthan": "../"
   }
 }
