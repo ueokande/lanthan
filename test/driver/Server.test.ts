@@ -153,7 +153,7 @@ describe('Server', () => {
 
       try {
         await promise;
-      } catch (e) {
+      } catch (e: any) {
         let resp = e.response;
         assert.strictEqual(resp.statusCode, 520);
         assert.deepStrictEqual(resp.body, { status: 520, message: 'error occurs' });
@@ -174,7 +174,7 @@ describe('Server', () => {
 
       try {
         await promise;
-      } catch (e) {
+      } catch (e: any) {
         let resp = e.response;
         assert.strictEqual(resp.statusCode, 520);
         assert.deepStrictEqual(resp.body, { status: 520, message: 'unknown response from browser' });
@@ -190,7 +190,7 @@ describe('Server', () => {
           resolveWithFullResponse: true,
         });
         throw new Error('expected error');
-      } catch (e) {
+      } catch (e: any) {
         let resp = e.response;
         assert.strictEqual(resp.statusCode, 404);
         assert.strictEqual(resp.body.status, 404);
@@ -207,7 +207,7 @@ describe('Server', () => {
           resolveWithFullResponse: true,
         });
         throw new Error('expected error');
-      } catch (e) {
+      } catch (e: any) {
         let resp = e.response;
         assert.strictEqual(resp.statusCode, 400);
         assert.strictEqual(resp.body.status, 400);
@@ -225,7 +225,7 @@ describe('Server', () => {
           resolveWithFullResponse: true,
         });
         throw new Error('expected error');
-      } catch (e) {
+      } catch (e: any) {
         let resp = e.response;
         let body = JSON.parse(resp.body);
         assert.strictEqual(resp.statusCode, 400);

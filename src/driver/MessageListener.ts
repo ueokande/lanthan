@@ -55,7 +55,7 @@ export class MessageListenerImpl {
           readingHeader = !readingHeader;
           buffer = Buffer.alloc(0);
         }
-      } catch (e) {
+      } catch (e: any) {
         this.onErrorListener(e);
       }
     });

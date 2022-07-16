@@ -8,14 +8,14 @@ describe('webext api integration', () => {
   let httpServer: http.Server;
   let lanthan: Lanthan;
 
-  before(async() => {
+  beforeAll(async() => {
     let app = server.newApp();
     httpServer = app.listen(10101, '127.0.0.1');
 
     lanthan = await Builder.forBrowser('firefox').build();
   });
 
-  after(async() => {
+  afterAll(async() => {
     if (lanthan) {
       await lanthan.quit();
     }
@@ -43,7 +43,7 @@ describe('webext api integration', () => {
     try {
       await browser.tabs.query();
       assert.fail('unexpected success');
-    } catch (e) {
+    } catch (e: any) {
       assert.strictEqual(e.message, 'Incorrect argument types for tabs.query.');
     }
   });

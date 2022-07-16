@@ -36,7 +36,7 @@ describe('MessageListenerImpl', () => {
       let buffer = fs.createReadStream(tmpfile);
       let listener = new MessageListenerImpl(buffer);
       listener.listen();
-      await new Promise((resolve) => {
+      await new Promise<void>((resolve) => {
         let count = 0;
         listener.onMessage((message) => {
           messages.push(message);
@@ -65,7 +65,7 @@ describe('MessageListenerImpl', () => {
       let listener = new MessageListenerImpl(buffer);
       listener.listen();
       listener.onMessage(() => {});
-      await new Promise((resolve) => {
+      await new Promise<void>((resolve) => {
         listener.onError((err) => {
           errors.push(err);
           resolve();

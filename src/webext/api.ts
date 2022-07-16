@@ -21,7 +21,7 @@ const create = (address: string, port: number): any => {
         });
         // unwrap due tu result is wrapped as an Array to return a Number
         return response[0];
-      } catch (err) {
+      } catch (err: any) {
         if (err instanceof errors.StatusCodeError) {
           const { statusCode } = err;
           const body = err.response.body;
